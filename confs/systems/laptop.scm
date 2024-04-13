@@ -1,6 +1,14 @@
 (use-modules (gnu) (gnu system nss)
 	     (nongnu packages linux)
-             (nongnu system linux-initrd))
+             (nongnu system linux-initrd)
+             ((admmk srvcs) #:prefix admmk:)
+             ((admmk pkgs emacs) #:prefix admmk:)
+
+             ;; for pinning the kernel
+             (srfi srfi-1)
+             (guix channels)
+             (guix inferior))
+
 (use-service-modules desktop ssh)
 (use-package-modules bootloaders certs
 		     emacs emacs-xyz
@@ -12,7 +20,7 @@
   (timezone "Europe/Moscow")
   (locale "en_US.utf8")
 
-  (kernel linux)
+  (kernel linux-lts)
   (initrd microcode-initrd)
   (firmware (list linux-firmware))
 
@@ -41,12 +49,13 @@
 
   (packages (append (list
                      emacs emacs-exwm emacs-desktop-environment
+                     admmk:emacs-stuff
                      xterm
                      nss-certs)
                     %base-packages))
 
   (services (append (list (service openssh-service-type)
                           (service xfce-desktop-service-type))
-		    %desktop-services))
+                    admmk:%desktop-services))
 
   (name-service-switch %mdns-host-lookup-nss))

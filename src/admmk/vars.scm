@@ -1,4 +1,4 @@
-(define-module (admmk sys vars)
+(define-module (admmk vars)
   #:export (%base-substitutes-urls
             %substitutes-urls))
 
