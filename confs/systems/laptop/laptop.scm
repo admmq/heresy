@@ -1,8 +1,10 @@
+(load "./linux.scm")
 (use-modules (gnu) (gnu system nss)
 	     (nongnu packages linux)
              (nongnu system linux-initrd)
              ((admmq srvcs) #:prefix admmq:)
-             ((admmq pkgs emacs) #:prefix admmq:))
+             ((admmq pkgs emacs) #:prefix admmq:)
+             ((my-local-packages)  #:prefix local:))
 
 (use-service-modules desktop ssh)
 (use-package-modules bootloaders certs
@@ -15,7 +17,7 @@
   (timezone "Europe/Moscow")
   (locale "en_US.utf8")
 
-  (kernel linux-lts)
+  (kernel local:my-linux-package)
   (initrd microcode-initrd)
   (firmware (list linux-firmware
                   sof-firmware))
@@ -37,20 +39,22 @@
 
   (users (cons (user-account
                 (name "user")
-                (comment "nothing matters")
+                (comment "something matters")
                 (group "users")
                 (supplementary-groups '("wheel" "netdev"
                                         "audio" "video")))
                %base-user-accounts))
 
   (packages (append (list
-                     emacs emacs-exwm emacs-desktop-environment
+                     ;; emacs emacs-exwm emacs-desktop-environment
+                     emacs admmq:my-emacs-exwm emacs-desktop-environment
                      emacs-pdf-tools
                      admmq:emacs-stuff
                      xterm)
                     %base-packages))
 
   (services (append (list (service openssh-service-type)
+                          (service bluetooth-service-type)
                           (service gnome-desktop-service-type))
                     admmq:%desktop-services))
 
