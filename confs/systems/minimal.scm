@@ -8,12 +8,10 @@
 
 (use-service-modules desktop ssh)
 (use-package-modules bootloaders certs
-		     emacs emacs-xyz
-		     ratpoison suckless wm
-                     xorg)
+		     emacs emacs-xyz)
 
 (operating-system
-  (host-name "grimoire")
+  (host-name "home")
   (timezone "Europe/Moscow")
   (locale "en_US.utf8")
 
@@ -32,7 +30,7 @@
                          (mount-point "/")
                          (type "ext4"))
                        (file-system
-                         (device (uuid "A5DD-CF6E" 'fat))
+                         (device (uuid "6742-87C9" 'fat))
                          (mount-point "/boot/efi")
                          (type "vfat")))
                  %base-file-systems))
@@ -45,17 +43,11 @@
                                         "audio" "video")))
                %base-user-accounts))
 
-  (packages (append (list
-                     ;; emacs emacs-exwm emacs-desktop-environment
-                     emacs admmq:my-emacs-exwm emacs-desktop-environment
-                     emacs-pdf-tools
-                     admmq:emacs-stuff
-                     xterm)
+  (packages (append (list emacs emacs-exwm emacs-desktop-environment
+                          admmq:emacs-stuff)
                     %base-packages))
 
-  (services (append (list (service openssh-service-type)
-                          (service bluetooth-service-type)
-                          (service gnome-desktop-service-type))
+  (services (append (list (service gnome-desktop-service-type))
                     admmq:%desktop-services))
 
   (name-service-switch %mdns-host-lookup-nss))
