@@ -3,7 +3,6 @@
 	     (nongnu packages linux)
              (nongnu system linux-initrd)
              ((admmq srvcs) #:prefix admmq:)
-             ((admmq pkgs emacs) #:prefix admmq:)
              ((my-local-packages)  #:prefix local:))
 
 (use-service-modules desktop ssh)
@@ -17,8 +16,7 @@
 
   (kernel local:my-linux-package)
   (initrd microcode-initrd)
-  (firmware (list linux-firmware
-                  sof-firmware))
+  (firmware (list linux-firmware))
 
   (bootloader (bootloader-configuration
                (bootloader grub-efi-bootloader)
@@ -43,11 +41,9 @@
                                         "audio" "video")))
                %base-user-accounts))
 
-  (packages (append (list emacs emacs-exwm emacs-desktop-environment
-                          admmq:emacs-stuff)
+  (packages (append (list emacs emacs-exwm emacs-desktop-environment)
                     %base-packages))
 
-  (services (append (list (service gnome-desktop-service-type))
-                    admmq:%desktop-services))
+  (services admmq:%desktop-services)
 
   (name-service-switch %mdns-host-lookup-nss))

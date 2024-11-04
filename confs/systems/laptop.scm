@@ -4,7 +4,6 @@
              (nongnu system linux-initrd)
              ((admmq srvcs) #:prefix admmq:)
              ((admmq pkgs emacs) #:prefix admmq:)
-             ((admmq pkgs emacs-xyz) #:prefix admmq:)
              ((my-local-packages)  #:prefix local:))
 
 (use-service-modules desktop ssh)
@@ -50,7 +49,6 @@
                      emacs-magit emacs-pdf-tools
                      admmq:emacs-stuff
                      openssh git kitty bluez
-                     ;; ungoogled-chromium
                      font-google-noto font-google-noto-serif-cjk)
                     %base-packages))
 

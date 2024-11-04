@@ -49,7 +49,8 @@
     (inputs
      (list xhost dbus))
     (propagated-inputs
-     (list gnu:emacs-xelb))
+     (list gnu:emacs-xelb
+           emacs-stuff))
     (arguments
      (list
       #:emacs emacs
@@ -79,7 +80,7 @@
                             (search-input-file inputs "/bin/xhost")
                             (search-input-file inputs "/bin/dbus-launch")
                             (search-input-file inputs "/bin/emacs")
-                            '(progn (require 'exwm)
-                                    (exwm-enable)
-                                    (server-start)))))
+                            '(progn (require 'stuff)
+                                    (stuff-config-exwm-set-variables)
+                                    (stuff-config-exwm-config)))))
                 (chmod exwm-executable #o555)))))))))
