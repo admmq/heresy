@@ -4,12 +4,13 @@
              (nongnu system linux-initrd)
              ((admmq srvcs) #:prefix admmq:)
              ((admmq pkgs emacs) #:prefix admmq:)
+             ((admmq pkgs emacs-xyz) #:prefix admmq:)
              ((my-local-packages)  #:prefix local:))
 
 (use-service-modules desktop ssh)
-(use-package-modules bootloaders certs terminals
-		     emacs emacs-xyz
-		     ratpoison suckless wm)
+(use-package-modules bootloaders certs terminals ssh fonts
+		     ratpoison suckless wm version-control
+                     emacs emacs-xyz linux)
 
 (operating-system
   (host-name "grimoire")
@@ -27,29 +28,30 @@
 
   (file-systems (append
                  (list (file-system
-                         (device (file-system-label "my-root"))
+                         (device (file-system-label "ROOT"))
                          (mount-point "/")
                          (type "ext4"))
                        (file-system
-                         (device (uuid "6742-87C9" 'fat))
+                         (device (file-system-label "BOOT"))
                          (mount-point "/boot/efi")
                          (type "vfat")))
                  %base-file-systems))
 
   (users (cons (user-account
                 (name "user")
-                (comment "something matters")
+                (comment "System user")
                 (group "users")
                 (supplementary-groups '("wheel" "netdev"
                                         "audio" "video")))
                %base-user-accounts))
 
   (packages (append (list
-                     i3-wm dmenu
-                     emacs emacs-exwm emacs-desktop-environment
+                     emacs admmq:emacs-exwm emacs-desktop-environment
                      emacs-magit emacs-pdf-tools
                      admmq:emacs-stuff
-                     kitty)
+                     openssh git kitty bluez
+                     ;; ungoogled-chromium
+                     font-google-noto font-google-noto-serif-cjk)
                     %base-packages))
 
   (services (append (list (service bluetooth-service-type)
