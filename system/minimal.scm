@@ -1,9 +1,8 @@
-(load "./linux.scm")
+(load "../misc/linux.scm")
 (use-modules (gnu) (gnu system nss)
 	     (nongnu packages linux)
              (nongnu system linux-initrd)
              ((admmq srvcs) #:prefix admmq:)
-             ((admmq pkgs emacs) #:prefix admmq:)
              ((my-local-packages)  #:prefix local:))
 
 (use-service-modules desktop ssh)
@@ -17,8 +16,7 @@
 
   (kernel local:my-linux-package)
   (initrd microcode-initrd)
-  (firmware (list linux-firmware
-                  sof-firmware))
+  (firmware (list linux-firmware))
 
   (bootloader (bootloader-configuration
                (bootloader grub-efi-bootloader)
@@ -30,7 +28,7 @@
                          (mount-point "/")
                          (type "ext4"))
                        (file-system
-                         (device (uuid "9777-1316" 'fat))
+                         (device (uuid "6742-87C9" 'fat))
                          (mount-point "/boot/efi")
                          (type "vfat")))
                  %base-file-systems))
@@ -43,14 +41,9 @@
                                         "audio" "video")))
                %base-user-accounts))
 
-  (packages (append (list
-                     emacs emacs-exwm emacs-desktop-environment
-                     emacs-magit emacs-pdf-tools
-                     admmq:emacs-stuff)
+  (packages (append (list emacs emacs-exwm emacs-desktop-environment)
                     %base-packages))
 
-  (services (append (list (service bluetooth-service-type)
-                          (service gnome-desktop-service-type))
-                    admmq:%desktop-services))
+  (services admmq:%desktop-services)
 
   (name-service-switch %mdns-host-lookup-nss))

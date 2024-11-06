@@ -12,7 +12,7 @@
   #:use-module (guix build-system emacs))
 
 (define-public emacs-stuff
-  (let ((commit "e6d167588e96ec88f3f2ba4007ee3bb94a405407")
+  (let ((commit "c224e70a73e7efcd004c6c68a784381d0c1df06f")
         (revision "0"))
     (package
       (name "emacs-stuff")
@@ -25,7 +25,7 @@
                 (file-name (git-file-name name version))
                 (sha256
                  (base32
-                  "129zfp54klh3sz7lg3h8fv1056z1dwqa6gf4v0m4kpi68ax0k7kp"))))
+                  "14r6hia0l97wxdnwwlsllmxai5m06a0d55lxglv85v3h047jbz7z"))))
       (build-system emacs-build-system)
       (arguments
        '(#:include '("\\.el$")
@@ -81,6 +81,55 @@
                             (search-input-file inputs "/bin/dbus-launch")
                             (search-input-file inputs "/bin/emacs")
                             '(progn (require 'stuff)
-                                    (stuff-config-exwm-set-variables)
-                                    (stuff-config-exwm-config)))))
+                                    (stuff-exwm-set-variables)
+                                    (stuff-exwm-config)))))
                 (chmod exwm-executable #o555)))))))))
+
+(define-public emacs-nano-theme
+  ;; no named branches
+  (let ((commit "ffe414c8af9c673caf8b8b05ba89a229cb9ad48b")
+        (revision "0"))
+    (package
+      (name "emacs-nano-theme")
+      (version (git-version "0.3.4" revision commit))
+      (source (origin
+                (method git-fetch)
+                (uri (git-reference
+                      (url "https://github.com/rougier/nano-theme.git")
+                      (commit commit)))
+                (file-name (git-file-name name version))
+                (sha256
+                 (base32
+                  "0wi5snsakpag7lcdndz10x5fxb0yrnignqdx3v4fm5drbk0d7hkr"))))
+      (build-system emacs-build-system)
+      (home-page "https://github.com/rougier/nano-theme.git")
+      (synopsis "GNU Emacs / N Λ N O Theme")
+      (description "A consistent theme for GNU Emacs which is based on
+Material colors and the dark theme is based on Nord colors.")
+      (license license:gpl3+))))
+
+(define-public emacs-spacious-padding
+  ;; named branch is outdated
+  (let ((commit "216cf9d38c468f2ce7f8685ba19d4d1fcbb87177")
+        (revision "0"))
+    (package
+      (name "emacs-spacious-padding")
+      (version (git-version "0.5.0" revision commit))
+      (source (origin
+                (method git-fetch)
+                (uri (git-reference
+                      (url "https://github.com/protesilaos/spacious-padding.git")
+                      (commit commit)))
+                (file-name (git-file-name name version))
+                (sha256
+                 (base32
+                  "16j568w1w8g2jn4iighvf37mii83x021x2p4dllyki5hz7x5ssjn"))))
+      (build-system emacs-build-system)
+      (home-page "https://github.com/protesilaos/spacious-padding.git")
+      (synopsis "Emacs package for increasing the padding/spacing of frames and windows")
+      (description "This package provides a global minor mode to increase
+the spacing/padding of Emacs windows and frames.The idea is to make editing
+and reading feel more comfortable.  Enable the mode with M-x
+spacious-padding-mode.  Adjust the exact spacing values by modifying the user option
+spacious-padding-widths.")
+      (license license:gpl3+))))

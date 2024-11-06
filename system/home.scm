@@ -1,4 +1,4 @@
-(load "./linux.scm")
+(load "../misc/linux.scm")
 (use-modules (gnu) (gnu system nss)
 	     (nongnu packages linux)
              (nongnu system linux-initrd)
@@ -7,12 +7,11 @@
              ((my-local-packages)  #:prefix local:))
 
 (use-service-modules desktop ssh)
-(use-package-modules bootloaders certs terminals ssh fonts
-		     ratpoison suckless wm version-control
-                     emacs emacs-xyz linux)
+(use-package-modules bootloaders certs
+		     emacs emacs-xyz)
 
 (operating-system
-  (host-name "grimoire")
+  (host-name "home")
   (timezone "Europe/Moscow")
   (locale "en_US.utf8")
 
@@ -27,29 +26,27 @@
 
   (file-systems (append
                  (list (file-system
-                         (device (file-system-label "ROOT"))
+                         (device (file-system-label "my-root"))
                          (mount-point "/")
                          (type "ext4"))
                        (file-system
-                         (device (file-system-label "BOOT"))
+                         (device (uuid "9777-1316" 'fat))
                          (mount-point "/boot/efi")
                          (type "vfat")))
                  %base-file-systems))
 
   (users (cons (user-account
                 (name "user")
-                (comment "System user")
+                (comment "something matters")
                 (group "users")
                 (supplementary-groups '("wheel" "netdev"
                                         "audio" "video")))
                %base-user-accounts))
 
   (packages (append (list
-                     emacs admmq:emacs-exwm emacs-desktop-environment
+                     emacs emacs-exwm emacs-desktop-environment
                      emacs-magit emacs-pdf-tools
-                     admmq:emacs-stuff
-                     openssh git kitty bluez
-                     font-google-noto font-google-noto-serif-cjk)
+                     admmq:emacs-stuff)
                     %base-packages))
 
   (services (append (list (service bluetooth-service-type)
