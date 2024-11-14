@@ -9,7 +9,7 @@
 (use-service-modules desktop ssh)
 (use-package-modules bootloaders certs terminals ssh fonts
 		     ratpoison suckless wm version-control
-                     emacs emacs-xyz linux)
+                     emacs emacs-xyz linux xorg)
 
 (operating-system
   (host-name "grimoire")
@@ -52,7 +52,7 @@
                      admmq:emacs-stuff
                      admmq:emacs-nano-theme
                      admmq:emacs-spacious-padding
-                     openssh git kitty bluez
+                     openssh git kitty bluez xrandr
                      font-google-noto font-google-noto-serif-cjk)
                     %base-packages))
 

@@ -7,7 +7,7 @@
 ;; Generate a bootable image (e.g. for USB sticks, etc.) with:
 ;; $ guix system image --image-type=iso9660 nongnu/system/install.scm
 
-(load "./systems/linux.scm")
+(load "./linux.scm")
 (define-module (nongnu system install)
   #:use-module ((my-local-packages)  #:prefix local:)
   #:use-module (guix channels)
