@@ -23,3 +23,19 @@ alias ls='ls -p --color=auto'
 alias ll='ls -l'
 alias grep='grep --color=auto'
 alias ip='ip -color=auto'
+
+fhs_shell_home=$HOME/Documents/fhs-shell
+[ -d $fhs_shell_home ] || mkdir -p $fhs_shell_home
+
+# example guix-fhs-shell python python-numpy
+function guix-fhs-shell {
+    cd ~
+    guix shell --network --container --emulate-fhs \
+         --preserve='^DISPLAY$' --preserve='^XAUTHORITY$' --expose=$XAUTHORITY \
+         --preserve='^DBUS_' --expose=/var/run/dbus \
+         --expose=/sys/dev --expose=/sys/devices --expose=/dev/dri \
+         --development ungoogled-chromium \
+         bash coreutils curl grep nss-certs gcc-toolchain git node \
+         $@ \
+         --share=$fhs_shell_home=$HOME
+}
