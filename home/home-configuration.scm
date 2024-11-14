@@ -43,7 +43,6 @@
                               ("ll" . "ls -l")
                               ("ls" . "ls -p --color=auto")))
                    (bashrc (list (local-file
-                                  "/home/user/Downloads/home/.bashrc" "bashrc")))
+                                  "./.bashrc" "bashrc")))
                    (bash-profile (list (local-file
-                                        "/home/user/Downloads/home/.bash_profile"
-                                        "bash_profile"))))))))
+                                        "./.bash_profile" "bash_profile"))))))))
