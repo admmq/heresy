@@ -27,8 +27,9 @@ alias ip='ip -color=auto'
 fhs_shell_home=$HOME/Documents/fhs-shell
 [ -d $fhs_shell_home ] || mkdir -p $fhs_shell_home
 
-# example guix-fhs-shell python python-numpy
-function guix-fhs-shell {
+# example:
+# guix-fhs-shell python python-numpy
+function admmq-guix-fhs-shell {
     cd ~
     guix shell --network --container --emulate-fhs \
          --preserve='^DISPLAY$' --preserve='^XAUTHORITY$' --expose=$XAUTHORITY \
@@ -38,4 +39,31 @@ function guix-fhs-shell {
          bash coreutils curl grep nss-certs gcc-toolchain git node \
          $@ \
          --share=$fhs_shell_home=$HOME
+}
+
+# example:
+# admmq-run-tor "15.235.48.110:6241 16AE419DBE20765A30E27008E1359DBDBAD260E1 cert=gRpsUldyaLSeBI51nMWcu55dwdD8YJ0N6DQJZxugFS995I+c24PtAaJVy1sfc+fnTvZcGQ" "37.59.26.110:19706 A633763DAE52CB625D5D2C61C719449C2AB510F2 cert=LvggKZHapvNlZPI7GN19q8OWBMuYtxkRnpvwjEfGI2rh14Vp4UsZnnzJa1dftIRgct4tNA"
+function admmq-run-tor {
+    torrc_location="/tmp/torrc"
+    bridge1=$1
+    bridge2=$2
+
+    admmq-create-torrc-file $torrc_location "$bridge1" "$bridge2"
+
+    tor -f $torrc_location
+}
+
+function admmq-create-torrc-file {
+    torrc_location=$1
+    bridge1=$2
+    bridge2=$3
+    obfs4proxy="$(guix build go-github-com-operatorfoundation-obfs4)/bin/obfs4proxy"
+
+    [[ -f $torrc_location ]] && rm $torrc_location
+    cat <<EOF >>$torrc_location
+UseBridges 1 
+ClientTransportPlugin obfs4 exec $obfs4proxy
+Bridge obfs4 $bridge1 iat-mode=0
+Bridge obfs4 $bridge2 iat-mode=0
+EOF
 }

@@ -26,11 +26,11 @@
 
   (file-systems (append
                  (list (file-system
-                         (device (file-system-label "my-root"))
+                         (device (file-system-label "ROOT"))
                          (mount-point "/")
                          (type "ext4"))
                        (file-system
-                         (device (uuid "9777-1316" 'fat))
+                         (device (file-system-label "BOOT"))
                          (mount-point "/boot/efi")
                          (type "vfat")))
                  %base-file-systems))
