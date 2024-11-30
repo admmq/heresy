@@ -22,6 +22,9 @@
                   sof-firmware))
 
   (bootloader (bootloader-configuration
+               (theme
+		(grub-theme
+		 (image #f)))
                (bootloader grub-efi-bootloader)
                (targets '("/boot/efi"))))
 
