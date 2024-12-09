@@ -1,0 +1,22 @@
+* Packages
+Here I load packages I use.
+#+BEGIN_SRC emacs-lisp
+  (defun stuff-packages-load-packages ()
+    (use-package nano-theme
+      :config
+      (load-theme 'nano-light t))
+
+    (use-package spacious-padding
+      :config
+      (setq spacious-padding-widths
+            '( :internal-border-width 15
+               :header-line-width 4
+               :mode-line-width 0
+               :tab-width 4
+               :right-divider-width 30
+               :scroll-bar-width 8))
+      (spacious-padding-mode 1)))
+
+  (provide 'stuff/packages)
+#+END_SRC
+

@@ -1,0 +1,19 @@
+#+title: Stuff
+My literal emacs config...
+
+* Installation
+
+Within the source directory, eval this
+#+begin_src bash
+  emacs -Q --batch --load build.el
+#+end_src
+
+After that, add this to your ~/.emacs
+#+begin_src elisp :eval query
+  (add-to-list 'load-path "~/path/to/stuff")
+  (use-package stuff
+    :config
+    (stuff-config-set-font 18)
+    (stuff-config-set-variables)
+    (stuff-packages-load-packages))
+#+end_src

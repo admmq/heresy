@@ -1,0 +1,4 @@
+**.el
+
+!build.el
+!.dir-locals.el

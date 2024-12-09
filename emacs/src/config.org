@@ -1,0 +1,48 @@
+* Config
+Here I defined a function for setting fonts depending on operating system I use.
+For now I am using built in. But maybe in future I will use Nerd Fonts.
+#+BEGIN_SRC emacs-lisp
+  (defun stuff-config-set-font (font-size)
+    (let ((set-font (lambda (font-name font-size)
+                      (when (member font-name (font-family-list))
+                        (set-frame-font
+                         ;; need space between font name and it's size
+                         (concat font-name (format " %s" font-size)) t t))
+                      )))
+      (cond
+       ((string-equal system-type "windows-nt")
+        (funcall set-font "Consolas" font-size))
+       ((string-equal system-type "darwin")
+        (funcall set-font "Menlo" font-size))
+       ((string-equal system-type "gnu/linux")
+        (funcall set-font "DejaVu Sans Mono" font-size)))))
+
+  (defun stuff-config-set-variables ()
+    (setq-default tab-width 4
+                  indent-tabs-mode nil
+                  cursor-type 'bar
+                  inhibit-startup-message t
+                  dired-listing-switches "-alFh"
+
+                  backup-by-copying t
+                  backup-directory-alist '(("." . "~/.emacs-saves/"))
+                  delete-old-versions t
+                  kept-new-versions 6
+                  kept-old-versions 2
+
+                  header-line-format mode-line-format
+                  mode-line-format nil
+
+                  package-archives '(("gnu" . "https://elpa.gnu.org/packages/")
+                                     ("nongnu" . "https://elpa.nongnu.org/nongnu/")
+                                     ("melpa" . "https://melpa.org/packages/")))
+
+    (menu-bar-mode -1)
+    (electric-pair-mode)
+
+    (when (display-graphic-p)
+      (scroll-bar-mode -1)
+      (tool-bar-mode -1)))
+
+  (provide 'stuff/config)
+#+END_SRC

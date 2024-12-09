@@ -12,7 +12,7 @@
   #:use-module (guix build-system emacs))
 
 (define-public emacs-stuff
-  (let ((commit "855de9f27906b7ed0b92a06f931ecd77d6525592")
+  (let ((commit "a613154282e108f8ad3051a9539f459c149b7071")
         (revision "0"))
     (package
       (name "emacs-stuff")
@@ -20,12 +20,12 @@
       (source (origin
                 (method git-fetch)
                 (uri (git-reference
-                      (url "https://github.com/admmq/emacs-stuff")
+                      (url "https://github.com/admmq/guix-stuff")
                       (commit commit)))
                 (file-name (git-file-name name version))
                 (sha256
                  (base32
-                  "1fqzpr7nw4n0wa0wwv2z3nw3xzihfsasn16hhxh93q3dp5padvhd"))))
+                  "0f69jf7vj04p0b3n9k13w8jg68d0asig883cxj6lal0hj6bsi4fh"))))
       (build-system emacs-build-system)
       (arguments
        '(#:include '("\\.el$")
@@ -33,10 +33,13 @@
                      ".dir-locals.el")
          #:phases
          (modify-phases %standard-phases
-           (add-after 'unpack 'load-org-files
+           (add-after 'unpack 'chdir
+             (lambda _
+               (chdir "emacs")))
+           (add-after 'chdir 'load-org-files
              (lambda _
                (invoke "emacs" "-Q" "--batch" "--load" "build.el"))))))
-      (home-page "https://github.com/admmq/emacs-stuff")
+      (home-page "https://github.com/admmq/guix-stuff")
       (synopsis "My emacs package")
       (description "My emacs package")
       (license license:gpl3+))))
