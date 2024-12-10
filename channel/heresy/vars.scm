@@ -1,4 +1,4 @@
-(define-module (admmq vars)
+(define-module (heresy vars)
   #:export (%base-substitutes-urls
             %substitutes-urls))
 

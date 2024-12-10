@@ -1,4 +1,4 @@
-(define-module (admmq pkgs emacs)
+(define-module (heresy pkgs emacs)
   #:use-module ((guix licenses) #:prefix license:)
   #:use-module (gnu packages)
   #:use-module (gnu packages emacs)
@@ -20,7 +20,7 @@
       (source (origin
                 (method git-fetch)
                 (uri (git-reference
-                      (url "https://github.com/admmq/guix-stuff")
+                      (url "https://github.com/admmq/herecy")
                       (commit commit)))
                 (file-name (git-file-name name version))
                 (sha256
@@ -39,7 +39,7 @@
            (add-after 'chdir 'load-org-files
              (lambda _
                (invoke "emacs" "-Q" "--batch" "--load" "build.el"))))))
-      (home-page "https://github.com/admmq/guix-stuff")
+      (home-page "https://github.com/admmq/herecy")
       (synopsis "My emacs package")
       (description "My emacs package")
       (license license:gpl3+))))
@@ -47,7 +47,7 @@
 (define-public emacs-exwm
   (package
     (inherit gnu:emacs-exwm)
-    (name "admmq-emacs-exwm")
+    (name "heresy-emacs-exwm")
     (synopsis "Emacs X window manager")
     (inputs
      (list xhost dbus))

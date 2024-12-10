@@ -1,4 +1,4 @@
-(define-module (admmq lib)
+(define-module (heresy lib)
   #:use-module (guix git-download)
   #:use-module (guix utils))
 

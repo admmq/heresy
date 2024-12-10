@@ -32,8 +32,8 @@
                             (openpgp-fingerprint
                              "2A39 3FFF 68F4 EF7A 3D29  12AF 6F51 20A0 22FB B2D5"))))
                          (channel
-                          (name 'admmq)
-                          (url "https://github.com/admmq/guix-stuff")
+                          (name 'heresy)
+                          (url "https://github.com/admmq/heresy")
                           (branch "main"))))
         (service home-bash-service-type
                  (home-bash-configuration

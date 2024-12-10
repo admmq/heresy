@@ -1,4 +1,4 @@
-(define-module (admmq pkgs python)
+(define-module (heresy pkgs python)
   #:use-module ((guix licenses) #:prefix license:)
   #:use-module (guix gexp)
   #:use-module (gnu packages)

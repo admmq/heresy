@@ -1,9 +1,9 @@
 (use-modules (guix)
-             ((admmq pkgs emacs) #:prefix admmq:)
-             ((admmq lib) #:prefix admmq:))
+             ((heresy pkgs emacs) #:prefix heresy:)
+             ((heresy lib) #:prefix heresy:))
 
 (package
-  (inherit admmq:emacs-stuff)
+  (inherit heresy:emacs-stuff)
   (source (local-file "." "emacs-stuff-local-build"
                       #:recursive? #t
-                      #:select? admmq:vcs-file?)))
+                      #:select? heresy:vcs-file?)))

@@ -1,6 +1,6 @@
-(define-module (admmq pkgs gnome)
+(define-module (heresy pkgs gnome)
   #:use-module ((guix licenses) #:prefix license:)
-  #:use-module (admmq pkgs python)
+  #:use-module (heresy pkgs python)
   #:use-module (gnu packages gnome)
   #:use-module (gnu packages bash)
   #:use-module (gnu packages gtk)

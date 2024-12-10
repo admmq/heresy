@@ -1,4 +1,4 @@
-(define-module (admmq pkgs utils)
+(define-module (heresy pkgs utils)
   #:use-module ((guix licenses) #:prefix license:)
   #:use-module (gnu packages)
   #:use-module (gnu packages linux)

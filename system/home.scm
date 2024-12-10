@@ -2,8 +2,8 @@
 (use-modules (gnu) (gnu system nss)
 	     (nongnu packages linux)
              (nongnu system linux-initrd)
-             ((admmq srvcs) #:prefix admmq:)
-             ((admmq pkgs emacs) #:prefix admmq:)
+             ((heresy srvcs) #:prefix heresy:)
+             ((heresy pkgs emacs) #:prefix heresy:)
              ((my-local-packages)  #:prefix local:))
 
 (use-service-modules desktop ssh)
@@ -46,11 +46,11 @@
   (packages (append (list
                      emacs emacs-exwm emacs-desktop-environment
                      emacs-magit emacs-pdf-tools
-                     admmq:emacs-stuff)
+                     heresy:emacs-stuff)
                     %base-packages))
 
   (services (append (list (service bluetooth-service-type)
                           (service gnome-desktop-service-type))
-                    admmq:%desktop-services))
+                    heresy:%desktop-services))
 
   (name-service-switch %mdns-host-lookup-nss))

@@ -2,8 +2,8 @@
 (use-modules (gnu) (gnu system nss)
 	     (nongnu packages linux)
              (nongnu system linux-initrd)
-             ((admmq srvcs) #:prefix admmq:)
-             ((admmq pkgs emacs) #:prefix admmq:)
+             ((heresy srvcs) #:prefix heresy:)
+             ((heresy pkgs emacs) #:prefix heresy:)
              ((my-local-packages)  #:prefix local:))
 
 (use-service-modules desktop ssh)
@@ -51,16 +51,16 @@
                      emacs
                      emacs-desktop-environment
                      emacs-magit emacs-pdf-tools emacs-evil
-                     admmq:emacs-exwm
-                     admmq:emacs-stuff
-                     admmq:emacs-nano-theme
-                     admmq:emacs-spacious-padding
+                     heresy:emacs-exwm
+                     heresy:emacs-stuff
+                     heresy:emacs-nano-theme
+                     heresy:emacs-spacious-padding
                      openssh git kitty bluez xrandr
                      font-google-noto font-google-noto-serif-cjk)
                     %base-packages))
 
   (services (append (list (service bluetooth-service-type)
                           (service gnome-desktop-service-type))
-                    admmq:%desktop-services))
+                    heresy:%desktop-services))
 
   (name-service-switch %mdns-host-lookup-nss))
