@@ -48,6 +48,7 @@
                %base-user-accounts))
 
   (packages (append (list
+                     stumpwm
                      emacs
                      emacs-desktop-environment
                      emacs-magit emacs-pdf-tools emacs-evil

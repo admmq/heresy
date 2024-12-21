@@ -32,9 +32,12 @@ fhs_shell_home=$HOME/Documents/fhs-shell
 function heresy-guix-fhs-shell {
     cd ~
     guix shell --network --container --emulate-fhs \
-         --preserve='^DISPLAY$' --preserve='^XAUTHORITY$' --expose=$XAUTHORITY \
-         --preserve='^DBUS_' --expose=/var/run/dbus \
-         --expose=/sys/dev --expose=/sys/devices --expose=/dev/dri \
+         --preserve='^XDG_|^WAYLAND_DISPLAY$' --preserve='^DISPLAY$' \
+         --expose=/dev/dri \
+         --share=/tmp/.X11-unix/ \
+         --expose=/run/user/$UID \
+         --preserve='^DBUS_'\
+         --expose=/var/run/dbus \
          --development ungoogled-chromium \
          bash coreutils curl grep nss-certs gcc-toolchain git node \
          $@ \
