@@ -70,3 +70,7 @@ Bridge obfs4 $bridge1 iat-mode=0
 Bridge obfs4 $bridge2 iat-mode=0
 EOF
 }
+
+function heresy-build-all-packages {
+    guix build $(guix package -A | awk '{ print $1 "@" $2 }')
+}
