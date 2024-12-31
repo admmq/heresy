@@ -4,6 +4,7 @@
   #:use-module (gnu packages)
   #:use-module (gnu packages compression)
   #:use-module (gnu packages image)
+  #:use-module (gnu packages python-build)
   #:use-module (guix packages)
   #:use-module (guix git-download)
   #:use-module (guix build-system python)
