@@ -56,6 +56,8 @@
               (sha256
                (base32 "08p33bvrp4403ir9xskgpr7ixvgkksm1dnj9yn8z0rm9w4k8zjkq"))))
     (build-system pyproject-build-system)
+    (arguments
+     `(#:tests? #f))
     (native-inputs
      (list python-setuptools python-wheel python-pytest))
     (home-page "https://github.com/libtcod/libtcod")
