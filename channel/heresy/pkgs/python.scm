@@ -51,7 +51,7 @@
                 (recursive? #t)))
               (file-name (git-file-name name version))
               (sha256
-               (base32 "1f271r0n9k5gflf4hf8nqncnwzg6wryq76p7w9ffp84qmmabm4jf"))))
+               (base32 "08p33bvrp4403ir9xskgpr7ixvgkksm1dnj9yn8z0rm9w4k8zjkq"))))
     (build-system python-build-system)
     (home-page "")
     (synopsis "Free, fast, portable and uncomplicated API for roguelike developers")
