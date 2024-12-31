@@ -6,7 +6,8 @@
   #:use-module (gnu packages image)
   #:use-module (guix packages)
   #:use-module (guix git-download)
-  #:use-module (guix build-system python))
+  #:use-module (guix build-system python)
+  #:use-module (guix build-system pyproject))
 
 (define-public python-pillow-heif-0.16
   (package
@@ -52,7 +53,7 @@
               (file-name (git-file-name name version))
               (sha256
                (base32 "08p33bvrp4403ir9xskgpr7ixvgkksm1dnj9yn8z0rm9w4k8zjkq"))))
-    (build-system python-build-system)
+    (build-system pyproject-build-system)
     (home-page "")
     (synopsis "Free, fast, portable and uncomplicated API for roguelike developers")
     (description
