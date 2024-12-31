@@ -56,7 +56,7 @@
                (base32 "08p33bvrp4403ir9xskgpr7ixvgkksm1dnj9yn8z0rm9w4k8zjkq"))))
     (build-system pyproject-build-system)
     (native-inputs
-     (list python-setuptools))
+     (list python-setuptools python-wheel))
     (home-page "https://github.com/libtcod/libtcod")
     (synopsis "Free, fast, portable and uncomplicated API for roguelike developers")
     (description
