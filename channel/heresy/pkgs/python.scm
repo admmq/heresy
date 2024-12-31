@@ -37,3 +37,25 @@
     (description
      "")
     (license #f)))
+
+(define-public python-tcod
+  (package
+    (name "python-tcod")
+    (version "1.24.0")
+    (source (origin
+              (method git-fetch)
+              (uri
+               (git-reference
+                (url "https://github.com/libtcod/libtcod.git")
+                (commit version)
+                (recursive? #t)))
+              (file-name (git-file-name name version))
+              (sha256
+               (base32 "1f271r0n9k5gflf4hf8nqncnwzg6wryq76p7w9ffp84qmmabm4jf"))))
+    (build-system python-build-system)
+    (home-page "")
+    (synopsis "Free, fast, portable and uncomplicated API for roguelike developers")
+    (description
+     "A collection of tools and algorithms for developing traditional roguelikes.
+Such as field-of-view, pathfinding, and a tile-based terminal emulator.")
+    (license license:bsd-3)))
