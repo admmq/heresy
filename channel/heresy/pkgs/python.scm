@@ -47,14 +47,16 @@
               (method git-fetch)
               (uri
                (git-reference
-                (url "https://github.com/libtcod/libtcod.git")
+                (url "https://github.com/libtcod/libtcod")
                 (commit version)
                 (recursive? #t)))
               (file-name (git-file-name name version))
               (sha256
                (base32 "08p33bvrp4403ir9xskgpr7ixvgkksm1dnj9yn8z0rm9w4k8zjkq"))))
     (build-system pyproject-build-system)
-    (home-page "")
+    (native-inputs
+     (list python-setuptools))
+    (home-page "https://github.com/libtcod/libtcod")
     (synopsis "Free, fast, portable and uncomplicated API for roguelike developers")
     (description
      "A collection of tools and algorithms for developing traditional roguelikes.
