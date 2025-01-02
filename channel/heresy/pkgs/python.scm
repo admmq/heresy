@@ -9,6 +9,7 @@
   #:use-module (gnu packages python-xyz)
   #:use-module (gnu packages libffi)
   #:use-module (gnu packages sdl)
+  #:use-module (gnu packages c)
   #:use-module (guix packages)
   #:use-module (guix git-download)
   #:use-module (guix build-system python)
