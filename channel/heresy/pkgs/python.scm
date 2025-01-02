@@ -50,7 +50,7 @@
 (define-public python-tcod
   (package
     (name "python-tcod")
-    (version "4.5.2")
+    (version "16.2.3")
     (source (origin
               (method git-fetch)
               (uri
@@ -61,7 +61,7 @@
               (file-name (git-file-name name version))
               (sha256
                (base32 "0yjmdpgfzd1amc4a5gkhx3dqg0lxd3sgq1vygxmj32kl1dkyx4y5"))))
-    (build-system python-build-system)
+    (build-system pyproject-build-system)
     (arguments
      '(#:tests? #f))
     (native-inputs
