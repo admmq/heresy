@@ -67,6 +67,7 @@
     (native-inputs
      (list sdl2-2.0
            python-setuptools
+           python-wheel
            python-pcpp
            python-pycparser
            python-requests
