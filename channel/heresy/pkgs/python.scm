@@ -89,3 +89,47 @@
 Such as field-of-view, pathfinding, and a tile-based terminal emulator.")
     (license license:bsd-3)))
 
+(define-public python-tcod-13.9.1
+  (let ((commit "d3419a5b4593c7df1580427fc07616d798c85856")
+        (revision "1"))
+    (package
+      (name "python-tcod")
+      (version "13.9.1")
+      (source (origin
+                (method git-fetch)
+                (uri
+                 (git-reference
+                  (url "https://github.com/libtcod/python-tcod")
+                  (commit commit)
+                  (recursive? #t)))
+                (file-name (git-file-name name version))
+                (sha256
+                 (base32 "0iq96qbgkqn73i40xj1s0xc4hqxi4b7hcspq6rmai8kg42xzcp8w"))))
+      (build-system pyproject-build-system)
+      (arguments
+       `(#:phases
+         (modify-phases %standard-phases
+           ;; sanity-check and check requires the package itself
+           (delete 'sanity-check)
+           (delete 'check))))
+      (native-inputs
+       (list sdl2-2.0
+             python-setuptools
+             python-wheel
+             python-pcpp
+             python-pycparser
+             python-requests
+             python-pytest-runner
+             python-pytest-benchmark
+             python-pytest-cov))
+      (propagated-inputs
+       (list python-numpy
+             python-typing-extensions
+             python-cffi))
+      (home-page "https://github.com/libtcod/python-tcod")
+      (synopsis "Free, fast, portable and uncomplicated API for roguelike developers")
+      (description
+       "A collection of tools and algorithms for developing traditional roguelikes.
+Such as field-of-view, pathfinding, and a tile-based terminal emulator.")
+      (license license:bsd-2))))
+
