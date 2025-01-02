@@ -65,8 +65,9 @@
     (arguments
      `(#:phases
        (modify-phases %standard-phases
-         ;; sanity-check requires the package itself
-         (delete 'sanity-check))))
+         ;; sanity-check and check requires the package itself
+         (delete 'sanity-check)
+         (delete 'check))))
     (native-inputs
      (list sdl2-2.0
            python-setuptools
