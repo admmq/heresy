@@ -60,7 +60,7 @@
                 (recursive? #t)))
               (file-name (git-file-name name version))
               (sha256
-               (base32 "08p33bvrp4403ir9xskgpr7ixvgkksm1dnj9yn8z0rm9w4k8zjkq"))))
+               (base32 "0yjmdpgfzd1amc4a5gkhx3dqg0lxd3sgq1vygxmj32kl1dkyx4y5"))))
     (build-system python-build-system)
     (arguments
      ;; tests require the package itself
