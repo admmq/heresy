@@ -7,6 +7,7 @@
   #:use-module (gnu packages image)
   #:use-module (gnu packages python-build)
   #:use-module (gnu packages python-xyz)
+  #:use-module (gnu packages libffi)
   #:use-module (guix packages)
   #:use-module (guix git-download)
   #:use-module (guix build-system python)
