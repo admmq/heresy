@@ -57,6 +57,7 @@
                (base32 "08p33bvrp4403ir9xskgpr7ixvgkksm1dnj9yn8z0rm9w4k8zjkq"))))
     (build-system pyproject-build-system)
     (arguments
+     ;; tests require the package itself
      `(#:tests? #f))
     (native-inputs
      (list python-setuptools python-wheel python-pytest))
@@ -66,3 +67,47 @@
      "A collection of tools and algorithms for developing traditional roguelikes.
 Such as field-of-view, pathfinding, and a tile-based terminal emulator.")
     (license license:bsd-3)))
+
+(define-public old-python-tcod
+  ;; named branch is outdated
+  (let ((commit "d3419a5b4593c7df1580427fc07616d798c85856")
+        (revision "1"))
+    (package
+      (name "oldpython-tcod")
+      (version "13.9.1")
+      (source
+       (origin
+         (method git-fetch)
+         (uri (git-reference
+               (url "https://github.com/libtcod/python-tcod")
+               (commit commit)
+               (recursive? #true)))
+         (file-name (git-file-name name version))
+         (sha256
+          (base32
+           "1b0ligrswvz307bbx5jp8wnnqz52v5s4gcgakxy4i3jvccalm2if"))))
+      (build-system python-build-system)
+      ;; tests fail for a strange reason
+      ;; "ERROR docs/conf.py - FileNotFoundError",
+      ;; but this file is in the checkout
+      (arguments
+       '(#:tests? #f))
+      (native-inputs
+       (list sdl2
+             python-pcpp
+             python-pycparser
+             python-requests
+             python-pytest-runner
+             python-pytest-benchmark
+             python-pytest-cov))
+      (propagated-inputs
+       (list python-numpy
+             python-typing-extensions
+             python-cffi))
+      (home-page "https://github.com/libtcod/python-tcod")
+      (synopsis
+       "This library is a Python cffi port of libtcod")
+      (description
+       "A high-performance Python port of libtcod.
+Includes the libtcodpy module for backwards compatibility with older projects.")
+      (license license:bsd-2))))
