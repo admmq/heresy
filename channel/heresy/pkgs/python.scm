@@ -63,10 +63,19 @@
                (base32 "0yjmdpgfzd1amc4a5gkhx3dqg0lxd3sgq1vygxmj32kl1dkyx4y5"))))
     (build-system python-build-system)
     (arguments
-     ;; tests require the package itself
-     `(#:tests? #f))
+     '(#:tests? #f))
     (native-inputs
-     (list python-setuptools python-wheel python-pytest))
+     (list sdl2
+           python-pcpp
+           python-pycparser
+           python-requests
+           python-pytest-runner
+           python-pytest-benchmark
+           python-pytest-cov))
+    (propagated-inputs
+     (list python-numpy
+           python-typing-extensions
+           python-cffi))
     (home-page "https://github.com/libtcod/python-tcod")
     (synopsis "Free, fast, portable and uncomplicated API for roguelike developers")
     (description
