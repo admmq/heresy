@@ -50,13 +50,13 @@
 (define-public python-tcod
   (package
     (name "python-tcod")
-    (version "1.24.0")
+    (version "v4.5.2")
     (source (origin
               (method git-fetch)
               (uri
                (git-reference
                 (url "https://github.com/libtcod/libtcod")
-                (commit version)
+                (commit (string-append "v" version))
                 (recursive? #t)))
               (file-name (git-file-name name version))
               (sha256
@@ -79,7 +79,7 @@ Such as field-of-view, pathfinding, and a tile-based terminal emulator.")
   (let ((commit "d3419a5b4593c7df1580427fc07616d798c85856")
         (revision "1"))
     (package
-      (name "oldpython-tcod")
+      (name "old-python-tcod")
       (version "13.9.1")
       (source
        (origin
