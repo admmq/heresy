@@ -11,6 +11,7 @@
   #:use-module (gnu packages sdl)
   #:use-module (gnu packages c)
   #:use-module (gnu packages python-web)
+  #:use-module (gnu packages python-check)
   #:use-module (guix packages)
   #:use-module (guix git-download)
   #:use-module (guix build-system python)
