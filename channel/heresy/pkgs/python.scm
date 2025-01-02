@@ -65,7 +65,7 @@
     (arguments
      '(#:tests? #f))
     (native-inputs
-     (list sdl2@2.0.14
+     (list sdl2-2.0.14
            python-setuptools
            python-pcpp
            python-pycparser
