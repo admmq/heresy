@@ -55,7 +55,7 @@
               (method git-fetch)
               (uri
                (git-reference
-                (url "https://github.com/libtcod/libtcod")
+                (url "https://github.com/libtcod/python-tcod")
                 (commit (string-append "v" version))
                 (recursive? #t)))
               (file-name (git-file-name name version))
@@ -67,7 +67,7 @@
      `(#:tests? #f))
     (native-inputs
      (list python-setuptools python-wheel python-pytest))
-    (home-page "https://github.com/libtcod/libtcod")
+    (home-page "https://github.com/libtcod/python-tcod")
     (synopsis "Free, fast, portable and uncomplicated API for roguelike developers")
     (description
      "A collection of tools and algorithms for developing traditional roguelikes.
