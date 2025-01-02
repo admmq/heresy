@@ -61,7 +61,7 @@
               (file-name (git-file-name name version))
               (sha256
                (base32 "08p33bvrp4403ir9xskgpr7ixvgkksm1dnj9yn8z0rm9w4k8zjkq"))))
-    (build-system pyproject-build-system)
+    (build-system python-build-system)
     (arguments
      ;; tests require the package itself
      `(#:tests? #f))
