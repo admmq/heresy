@@ -104,7 +104,7 @@ Such as field-of-view, pathfinding, and a tile-based terminal emulator.")
                   (recursive? #t)))
                 (file-name (git-file-name name version))
                 (sha256
-                 (base32 "0iq96qbgkqn73i40xj1s0xc4hqxi4b7hcspq6rmai8kg42xzcp8w"))))
+                 (base32 "1b0ligrswvz307bbx5jp8wnnqz52v5s4gcgakxy4i3jvccalm2if"))))
       (build-system pyproject-build-system)
       (arguments
        `(#:phases
