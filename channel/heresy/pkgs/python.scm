@@ -50,7 +50,7 @@
 (define-public python-tcod
   (package
     (name "python-tcod")
-    (version "v4.5.2")
+    (version "4.5.2")
     (source (origin
               (method git-fetch)
               (uri
