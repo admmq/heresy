@@ -63,7 +63,10 @@
                (base32 "0iq96qbgkqn73i40xj1s0xc4hqxi4b7hcspq6rmai8kg42xzcp8w"))))
     (build-system pyproject-build-system)
     (arguments
-     '(#:tests? #f))
+     `(#:phases
+       (modify-phases %standard-phases
+         ;; sanity-check requires the package itself
+         (delete 'sanity-check))))
     (native-inputs
      (list sdl2-2.0
            python-setuptools
