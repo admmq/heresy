@@ -24,12 +24,12 @@ alias ll='ls -l'
 alias grep='grep --color=auto'
 alias ip='ip -color=auto'
 
-fhs_shell_home=$HOME/Documents/fhs-shell
-[ -d $fhs_shell_home ] || mkdir -p $fhs_shell_home
-
 # example:
 # guix-fhs-shell python python-numpy
 function heresy-guix-fhs-shell {
+    fhs_shell_home=$HOME/FHS
+    [ -d $fhs_shell_home ] || mkdir -p $fhs_shell_home
+
     cd ~
     guix shell --network --container --emulate-fhs \
          --preserve='^XDG_|^WAYLAND_DISPLAY$' --preserve='^DISPLAY$' \
@@ -73,4 +73,50 @@ EOF
 
 function heresy-build-all-packages {
     guix build $(guix package -A | awk '{ print $1 "@" $2 }')
+}
+
+function heresy-generate-ssh-keys {
+    ssh-keygen -t ed25519
+}
+
+function heresy-data-backup {
+    today=$(date +'%m-%d-%y')
+
+    cd ~ \
+        && mkdir -v ./backup \
+        && cp -rv ./Documents ./backup \
+        && cp -rv ./Music ./backup \
+        && cp -rv ./Sources ./backup \
+        && cp -rv ./Videos ./backup \
+        && tar -cvzf ./$today-backup.tar.gz ./backup/ \
+        && rm -rfv ./backup
+}
+
+function heresy-data-delete {
+    cd ~
+    rm -rfv ./Documents
+    rm -rfv ./Music
+    rm -rfv ./Sources
+    rm -rfv ./Videos
+}
+
+function heresy-data-restore {
+    data_archive=$1
+
+    if [[ $# -ne 1 ]]; then
+        echo 'Too many/few arguments, expecting one' >&2
+        exit 1
+    fi
+
+    cd ~ \
+        && tar -xvzf ./$data_archive \
+        && mv ./backup/Documents/ . \
+        && mv ./backup/Music/ . \
+        && mv ./backup/Sources/ . \
+        && mv ./backup/Videos/ . \
+        && rm -rfv ./backup
+}
+
+function heresy-disable-screen-saver-blanking {
+    xset s off
 }

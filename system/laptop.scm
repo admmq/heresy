@@ -1,12 +1,10 @@
-(load "../misc/linux.scm")
 (use-modules (gnu) (gnu system nss)
 	     (nongnu packages linux)
              (nongnu system linux-initrd)
              ((heresy srvcs) #:prefix heresy:)
-             ((heresy pkgs emacs) #:prefix heresy:)
-             ((my-local-packages)  #:prefix local:))
+             ((heresy pkgs emacs) #:prefix heresy:))
 
-(use-service-modules desktop ssh)
+(use-service-modules desktop ssh linux)
 (use-package-modules bootloaders certs terminals ssh fonts
 		     ratpoison suckless wm version-control
                      emacs emacs-xyz linux xorg)
@@ -16,7 +14,13 @@
   (timezone "Europe/Moscow")
   (locale "en_US.utf8")
 
-  (kernel local:my-linux-package)
+  (kernel linux)
+  (kernel-arguments (cons* "modprobe.blacklist=pcspkr,snd_pcsp"
+                           "rtw89_pci.disable_clkreq=y" "rtw89_pci.disable_aspm_l1=y" "rtw89_pci.disable_aspm_l1ss=y"
+                           "rtw89pci.disable_clkreq=y" "rtw89pci.disable_aspm_l1=y" "rtw89pci.disable_aspm_l1ss=y"
+                           "rtw89_core.disable_ps_mode=y"
+                           "rtw89core.disable_ps_mode=y"
+                           %default-kernel-arguments))
   (initrd microcode-initrd)
   (firmware (list linux-firmware
                   sof-firmware))
