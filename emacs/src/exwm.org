@@ -1,4 +1,6 @@
 * EXWM
+
+Here I define a hook, so exwm can switch monitors when I connect my laptop. I definately should rewrite it.
 #+BEGIN_SRC emacs-lisp
   (defun exwm-change-screen-hook (external-monitor)
     (let ((xrandr-output-regexp "\n\\([^ ]+\\) connected ")
@@ -19,11 +21,17 @@
           (setq exwm-randr-workspace-monitor-plist (list 0 (match-string 1)))))))
 #+END_SRC
 
-
 Here I set some variable I want to use with exwm. Like displaying time
 and battery.Also it's recommended to enable icomplete-vertical-mode. Still don't
 know why but I took it from the [[https://github.com/emacs-exwm/exwm/wiki/Configuration-Example][exwm configuration example]]
 #+BEGIN_SRC emacs-lisp
+  (defun brigtnessDown ()
+    (interactive)
+    (shell-command "brightnessctl set 10%-"))
+  (defun brigtnessUp ()
+    (interactive)
+    (shell-command "brightnessctl set +10%"))
+
   (defun stuff-exwm-set-variables ()
     ;; Turn on `display-time-mode' if you don't use an external bar.
     (setq display-time-default-load-average nil)
@@ -35,6 +43,9 @@ know why but I took it from the [[https://github.com/emacs-exwm/exwm/wiki/Config
     ;; to or back from a floating frame (remember 'C-x 5 o' if you refuse this
     ;; proposal however).
     (icomplete-vertical-mode 1)
+
+    (global-set-key (kbd "<XF86MonBrightnessDown>") 'brigtnessDown)
+    (global-set-key (kbd "<XF86MonBrightnessUp>") 'brigtnessUp)
 
     ;; Emacs server is not required to run EXWM but it has some interesting uses
     ;; (see next section).
@@ -141,9 +152,8 @@ All of these also were taken from the [[https://github.com/emacs-exwm/exwm/wiki/
     ;; ready.  You can put it _anywhere_ in your configuration.
     (exwm-enable))
 #+END_SRC
-
 I probably shoud change it one day...
-And also I provide these funcions as a module.
+
 #+BEGIN_SRC emacs-lisp
   (provide 'stuff/exwm)
 #+END_SRC

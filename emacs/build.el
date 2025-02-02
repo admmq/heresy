@@ -1,18 +1,18 @@
+(defun remove-needed-files (files)
+  (delete "README.org" files))
+
+(defun get-org-files-from-directory (directory)
+  (seq-filter (apply-partially 'string-match-p "\.org$")
+              (remove-needed-files (directory-files directory))))
+
+(defun get-absolute-org-files-from-directory (directory)
+  (mapcar (apply-partially 'concat directory)
+          (get-org-files-from-directory directory)))
+
 (let* ((current-working-directory (if (display-graphic-p)
 				      (file-name-directory buffer-file-name)
-				    (concat (getenv "PWD") "/")))
-       (files-in-directory
-	(lambda (directory)
-	  (mapcar (apply-partially #'concat (concat directory "/"))
-		  (remove "." (remove ".." (directory-files (concat "./" directory)))))))
-       (full-files-names
-	(lambda (files-strings)
-	  (mapcar (apply-partially #'concat current-working-directory)
-		  files-strings)))
-       (org-to-el
-	(lambda (org-files)
-	  (mapcar #'org-babel-load-file org-files))))
-  (funcall org-to-el
-	   (funcall full-files-names
-		    (cons "stuff.org"
-                          (funcall files-in-directory "src")))))
+				    (concat (getenv "PWD") "/"))))
+  (mapcar #'org-babel-load-file
+          (get-absolute-org-files-from-directory current-working-directory))
+  (mapcar #'org-babel-load-file
+          (get-absolute-org-files-from-directory (concat current-working-directory "src/"))))

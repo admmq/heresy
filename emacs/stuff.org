@@ -4,9 +4,12 @@ I tried to make it cross platform, but my main focus is [[https://guix.gnu.org/]
 
 First, let's load my modules. I ignore errors, that's needed because of the way Guix build elisp packages.
 #+BEGIN_SRC emacs-lisp
-(require 'stuff/packages "src/packages.el" 'noerror)
-(require 'stuff/config "src/config.el" 'noerror)
-(require 'stuff/exwm "src/exwm.el" 'noerror)
+  (require 'stuff/packages "src/packages.el" 'noerror)
+  (require 'stuff/config "src/config.el" 'noerror)
+  (require 'stuff/exwm "src/exwm.el" 'noerror)
+#+END_SRC
 
-(provide 'stuff)
+And I need to provide all my module so they can be used.
+#+BEGIN_SRC emacs-lisp
+  (provide 'stuff)
 #+END_SRC

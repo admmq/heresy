@@ -88,29 +88,6 @@
                                     (stuff-exwm-config)))))
                 (chmod exwm-executable #o555)))))))))
 
-(define-public emacs-nano-theme
-  ;; no named branches
-  (let ((commit "ffe414c8af9c673caf8b8b05ba89a229cb9ad48b")
-        (revision "0"))
-    (package
-      (name "emacs-nano-theme")
-      (version (git-version "0.3.4" revision commit))
-      (source (origin
-                (method git-fetch)
-                (uri (git-reference
-                      (url "https://github.com/rougier/nano-theme.git")
-                      (commit commit)))
-                (file-name (git-file-name name version))
-                (sha256
-                 (base32
-                  "0wi5snsakpag7lcdndz10x5fxb0yrnignqdx3v4fm5drbk0d7hkr"))))
-      (build-system emacs-build-system)
-      (home-page "https://github.com/rougier/nano-theme.git")
-      (synopsis "GNU Emacs / N Λ N O Theme")
-      (description "A consistent theme for GNU Emacs which is based on
-Material colors and the dark theme is based on Nord colors.")
-      (license license:gpl3+))))
-
 (define-public emacs-spacious-padding
   ;; named branch is outdated
   (let ((commit "216cf9d38c468f2ce7f8685ba19d4d1fcbb87177")

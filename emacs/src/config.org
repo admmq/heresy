@@ -1,4 +1,5 @@
 * Config
+
 Here I defined a function for setting fonts depending on operating system I use.
 For now I am using built in. But maybe in future I will use Nerd Fonts.
 #+BEGIN_SRC emacs-lisp
@@ -16,7 +17,10 @@ For now I am using built in. But maybe in future I will use Nerd Fonts.
         (funcall set-font "Menlo" font-size))
        ((string-equal system-type "gnu/linux")
         (funcall set-font "DejaVu Sans Mono" font-size)))))
+#+END_SRC
 
+Also I defined a function to set variables I prefer.
+#+BEGIN_SRC emacs-lisp
   (defun stuff-config-set-variables ()
     (setq-default tab-width 4
                   indent-tabs-mode nil
@@ -40,9 +44,13 @@ For now I am using built in. But maybe in future I will use Nerd Fonts.
     (menu-bar-mode -1)
     (electric-pair-mode)
 
+    (load-theme 'tsdh-light t)
+
     (when (display-graphic-p)
       (scroll-bar-mode -1)
       (tool-bar-mode -1)))
+#+END_SRC
 
+#+BEGIN_SRC emacs-lisp
   (provide 'stuff/config)
 #+END_SRC

@@ -1,4 +1,5 @@
 **.el
 
 !build.el
+!clean.el
 !.dir-locals.el
