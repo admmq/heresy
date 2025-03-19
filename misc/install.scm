@@ -5,7 +5,7 @@
 ;;; Copyright © 2024 Hilton Chain <hako@ultrarare.space>
 
 ;; Generate a bootable image (e.g. for USB sticks, etc.) with:
-;; $ guix system image --image-type=iso9660 nongnu/system/install.scm
+;; guix system image --image-type=iso9660 ./install.scm
 
 (load "./linux.scm")
 (define-module (nongnu system install)
@@ -50,14 +50,18 @@
   (operating-system
     (inherit installation-os)
     (kernel local:my-linux-package)
+    (kernel-arguments (cons* "modprobe.blacklist=pcspkr,snd_pcsp"
+                           "rtw89_pci.disable_clkreq=y" "rtw89_pci.disable_aspm_l1=y" "rtw89_pci.disable_aspm_l1ss=y"
+                           "rtw89pci.disable_clkreq=y" "rtw89pci.disable_aspm_l1=y" "rtw89pci.disable_aspm_l1ss=y"
+                           "rtw89_core.disable_ps_mode=y"
+                           "rtw89core.disable_ps_mode=y"
+                           %default-kernel-arguments))
     (firmware (list linux-firmware))
     (packages
       (append
         (list curl
               git
-              neovim
-              emacs
-              zile)
+              emacs)
         (operating-system-packages installation-os)))
     (services
      (append (list (service network-manager-service-type))

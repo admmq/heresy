@@ -6,9 +6,11 @@
 
 (define-public my-linux-package
   (package
-    (inherit linux-lts)
+    (inherit (customize-linux
+              #:linux linux-6.13
+              #:defconfig (local-file "defconfig")))
     (name "my-linux-package")
-    (version "v6.6")
+    (version "v6.13")
     (source
      (origin
        (method git-fetch)
@@ -17,6 +19,6 @@
              (commit version)))
        (file-name (git-file-name name version))
        (sha256
-        (base32 "1n34v4rq551dffd826cvr67p0l6qwyyjmsq6l98inbn4qqycfi49"))))))
+        (base32 "0ba4cik4aag1l9rvv2mmx987b2sfrz4avxwm1x28ib65chmbcg8l"))))))
 
-;; my-linux-package
+my-linux-package
