@@ -61,7 +61,7 @@
       (append
         (list curl
               git
-              emacs)
+              zile)
         (operating-system-packages installation-os)))
     (services
      (append (list (service network-manager-service-type))
