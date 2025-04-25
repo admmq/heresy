@@ -12,7 +12,7 @@
   #:use-module (guix build-system emacs))
 
 (define-public emacs-stuff
-  (let ((commit "9874727ef131821d5ee3fb08620fbe18ca8941c1")
+  (let ((commit "46c9641dd4cb0f6520295af0462d982bcd3a5097")
         (revision "0"))
     (package
       (name "emacs-stuff")
@@ -25,7 +25,7 @@
                 (file-name (git-file-name name version))
                 (sha256
                  (base32
-                  "1iq0xqh55ah9244ynwpgji44105by885zxndrzdi29j22bc6ygwk"))))
+                  "0v7s9hgrxcfhqw5kcckfpnbazy21rbqjzb67siwfb94lfr7nr5pq"))))
       (build-system emacs-build-system)
       (arguments
        '(#:include '("\\.el$")
@@ -113,3 +113,5 @@ and reading feel more comfortable.  Enable the mode with M-x
 spacious-padding-mode.  Adjust the exact spacing values by modifying the user option
 spacious-padding-widths.")
       (license license:gpl3+))))
+
+emacs-stuff

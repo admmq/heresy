@@ -2,23 +2,39 @@
 
 Here I define a hook, so exwm can switch monitors when I connect my laptop. I definately should rewrite it.
 #+BEGIN_SRC emacs-lisp
-  (defun exwm-change-screen-hook (external-monitor)
-    (let ((xrandr-output-regexp "\n\\([^ ]+\\) connected ")
-          default-output)
-      (with-temp-buffer
-        (call-process "xrandr" nil t nil)
-        (goto-char (point-min))
-        (re-search-forward xrandr-output-regexp nil 'noerror)
-        (setq default-output (match-string 1))
-        (forward-line)
-        (if (not (re-search-forward xrandr-output-regexp nil 'noerror))
-            (call-process "xrandr" nil nil nil "--output" default-output "--auto"
-                          "--output" external-monitor "--off")
+  (defun exwm-change-screen-hook ()
+    (interactive)
+    (let ((built-in-display (get-built-in-display))
+          (external-display (get-external-display)))
+      (if (string-equal (get-external-display-status external-display)
+                        "connected")
           (call-process
            "xrandr" nil nil nil
-           "--output" (match-string 1) "--primary" "--auto"
-           "--output" default-output "--off")
-          (setq exwm-randr-workspace-monitor-plist (list 0 (match-string 1)))))))
+           "--output" external-display
+           "--primary" "--mode" "2560x1440" "--pos" "0x0" "--rotate" "normal"
+           "--output" built-in-display
+           "--off")
+        (call-process
+         "xrandr" nil nil nil
+         "--output" external-display
+         "--off"
+         "--output" built-in-display
+         "--mode" "1920x1200" "--pos" "0x0" "--rotate" "normal")
+        (setq exwm-randr-workspace-monitor-plist (list 0 external-display)))))
+
+
+  (defun cut-newline-character (string)
+    (substring string 0 (- (length string) 1)))
+
+  (defun get-built-in-display ()
+    (cut-newline-character (shell-command-to-string "xrandr | grep eDP | awk '{print $1}'")))
+
+  (defun get-external-display ()
+    (cut-newline-character (shell-command-to-string "xrandr | grep HDMI | awk '{print $1}'")))
+
+  (defun get-external-display-status (external-display)
+    (cut-newline-character
+     (shell-command-to-string (concat "xrandr | grep " external-display " | awk '{print $2}'"))))
 #+END_SRC
 
 Here I set some variable I want to use with exwm. Like displaying time
@@ -46,6 +62,7 @@ know why but I took it from the [[https://github.com/emacs-exwm/exwm/wiki/Config
 
     (global-set-key (kbd "<XF86MonBrightnessDown>") 'brigtnessDown)
     (global-set-key (kbd "<XF86MonBrightnessUp>") 'brigtnessUp)
+    (global-set-key (kbd "<XF86Display>") 'exwm-change-screen-hook)
 
     ;; Emacs server is not required to run EXWM but it has some interesting uses
     ;; (see next section).
@@ -138,15 +155,8 @@ All of these also were taken from the [[https://github.com/emacs-exwm/exwm/wiki/
             ;; search
             ([?\C-s] . [?\C-f])))
 
-    (setq exwm-randr-workspace-monitor-plist '(0 "eDP-1"))
-    (add-hook 'exwm-randr-screen-change-hook
-              (lambda ()
-                (exwm-change-screen-hook "HDMI-1")))
+    ;; Enables screen resize when I change my monitor.
     (exwm-randr-mode 1)
-
-    ;; You can hide the minibuffer and echo area when they're not used, by
-    ;; uncommenting the following line.
-                                          ;(setq exwm-workspace-minibuffer-position 'bottom)
 
     ;; Do not forget to enable EXWM. It will start by itself when things are
     ;; ready.  You can put it _anywhere_ in your configuration.
