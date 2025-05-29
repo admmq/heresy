@@ -47,12 +47,22 @@ know why but I took it from the [[https://github.com/emacs-exwm/exwm/wiki/Config
   (defun brigtnessUp ()
     (interactive)
     (shell-command "brightnessctl set +10%"))
+  (defun volumeUp ()
+    (interactive)
+    (shell-command "pactl -- set-sink-volume 0 +10%"))
+  (defun volumeDown ()
+    (interactive)
+    (shell-command "pactl -- set-sink-volume 0 -10%"))
+  (defun volumeOff ()
+    (interactive)
+    (shell-command "pactl -- set-sink-volume 0 0"))
 
   (defun stuff-exwm-set-variables ()
-    ;; Turn on `display-time-mode' if you don't use an external bar.
-    (setq display-time-default-load-average nil)
-    (display-time-mode t)
-    (display-battery-mode)
+    (set-frame-parameter (selected-frame) 'alpha '(80 . 50))
+    (add-to-list 'default-frame-alist '(alpha . (80 . 50)))
+
+    (start-process "polybar" nil "polybar")
+    (start-process "picom" nil "picom")
 
     ;; You are strongly encouraged to enable something like `icomplete-vertical-mode' to alter
     ;; the default behavior of 'C-x b', or you will take great pains to switch
@@ -62,7 +72,9 @@ know why but I took it from the [[https://github.com/emacs-exwm/exwm/wiki/Config
 
     (global-set-key (kbd "<XF86MonBrightnessDown>") 'brigtnessDown)
     (global-set-key (kbd "<XF86MonBrightnessUp>") 'brigtnessUp)
-    (global-set-key (kbd "<XF86Display>") 'exwm-change-screen-hook)
+    (global-set-key (kbd "<XF86AudioLowerVolume>") 'volumeDown)
+    (global-set-key (kbd "<XF86AudioRaiseVolume>") 'volumeUp)
+    (global-set-key (kbd "<XF86AudioMute>") 'volumeOff)
 
     ;; Emacs server is not required to run EXWM but it has some interesting uses
     ;; (see next section).
@@ -75,7 +87,7 @@ All of these also were taken from the [[https://github.com/emacs-exwm/exwm/wiki/
     (require 'exwm)
 
     ;; Set the initial number of workspaces (they can also be created later).
-    (setq exwm-workspace-number 4)
+    (setq exwm-workspace-number 10)
 
     ;; All buffers created in EXWM mode are named "*EXWM*". You may want to
     ;; change it in `exwm-update-class-hook' and `exwm-update-title-hook', which
@@ -102,27 +114,24 @@ All of these also were taken from the [[https://github.com/emacs-exwm/exwm/wiki/
     ;; Global keybindings can be defined with `exwm-input-global-keys'.
     ;; Here are a few examples:
     (setq exwm-input-global-keys
-          `(
-            ;; Bind "s-r" to exit char-mode and fullscreen mode.
+          `(;; Bind "s-r" to exit char-mode and fullscreen mode.
             ([?\s-r] . exwm-reset)
             ;; Bind "s-w" to switch workspace interactively.
             ([?\s-w] . exwm-workspace-switch)
-            ;; Bind "s-0" to "s-9" to switch to a workspace by its index.
+            ;; Bind "s-1" to "s-9" to switch to a workspace by its index.
             ,@(mapcar (lambda (i)
-                        `(,(kbd (format "s-%d" i)) .
+                        `(,(kbd (format "s-%d" (1+ i))) .
                           (lambda ()
                             (interactive)
                             (exwm-workspace-switch-create ,i))))
-                      (number-sequence 0 9))
+                      (number-sequence 0 8))
             ;; Bind "s-&" to launch applications ('M-&' also works if the output
             ;; buffer does not bother you).
             ([?\s-&] . (lambda (command)
-                         (interactive (list (read-shell-command "$ ")))
+                         (interactive (list (read-shell-command "app name> ")))
                          (start-process-shell-command command nil command)))
-            ;; Bind "s-<f2>" to "slock", a simple X display locker.
-            ([s-f2] . (lambda ()
-                        (interactive)
-                        (start-process "" nil "/usr/bin/slock")))))
+            (,(kbd "s-0") . (lambda () (interactive) (exwm-workspace-switch-create 9)))
+            (,(kbd "s-l") . (lambda () (interactive) (start-process "xlock" nil "xlock")))))
 
     ;; To add a key binding only available in line-mode, simply define it in
     ;; `exwm-mode-map'.  The following example shortens 'C-c q' to 'C-q'.

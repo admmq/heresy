@@ -10,5 +10,4 @@
   (append
    %base-substitutes-urls
    (list
-    "http://ci.guix.trop.in"
     "https://substitutes.nonguix.org")))

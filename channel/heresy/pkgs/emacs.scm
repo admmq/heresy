@@ -113,5 +113,3 @@ and reading feel more comfortable.  Enable the mode with M-x
 spacious-padding-mode.  Adjust the exact spacing values by modifying the user option
 spacious-padding-widths.")
       (license license:gpl3+))))
-
-emacs-stuff

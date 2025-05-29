@@ -1,4 +1,4 @@
-(define-module (my-local-packages)
+(define-module (my-linux-package)
   #:use-module (guix)
   #:use-module (nongnu packages linux)
   #:use-module (gnu packages linux)
@@ -7,10 +7,9 @@
 (define-public my-linux-package
   (package
     (inherit (customize-linux
-              #:linux linux-6.13
-              #:defconfig (local-file "defconfig")))
+              #:linux linux-6.14))
     (name "my-linux-package")
-    (version "v6.13")
+    (version "v6.14")
     (source
      (origin
        (method git-fetch)
@@ -19,6 +18,6 @@
              (commit version)))
        (file-name (git-file-name name version))
        (sha256
-        (base32 "0ba4cik4aag1l9rvv2mmx987b2sfrz4avxwm1x28ib65chmbcg8l"))))))
+        (base32 "117x58ynw6n2cl09jh5q49f2nm64wlfn5r5han8an42y5zmk2ng4"))))))
 
 my-linux-package
