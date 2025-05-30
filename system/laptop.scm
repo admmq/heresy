@@ -1,17 +1,16 @@
 (load "../misc/linux.scm")
-(load "../emacs/package.scm")
 (use-modules (gnu) (gnu system nss)
              (gnu packages image-viewers)
              (gnu packages compton)
              (gnu packages wm)
+             (gnu packages pulseaudio)
 	     (nongnu packages linux)
              (nongnu system linux-initrd)
              (guix channels)
              (srfi srfi-1)
              ((heresy srvcs) #:prefix heresy:)
              ((heresy pkgs emacs) #:prefix heresy:)
-             ((my-linux-package)  #:prefix local:)
-             ((local-emacs) #:prefix local:))
+             ((my-linux-package)  #:prefix local:))
 
 (use-service-modules desktop linux)
 (use-package-modules bootloaders certs terminals ssh fonts
@@ -65,10 +64,10 @@
                      emacs-desktop-environment
                      emacs-spacious-padding
                      emacs-magit emacs-pdf-tools
-                     local:emacs-exwm
-                     local:emacs-stuff
+                     heresy:emacs-exwm
+                     heresy:emacs-stuff
                      openssh git kitty bluez xrandr
-                     feh picom polybar
+                     feh picom polybar pavucontrol
                      font-google-noto font-google-noto-serif-cjk)
                     %base-packages))
 
