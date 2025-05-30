@@ -26,11 +26,4 @@
            (lambda _
              (invoke "emacs" "-Q" "--batch" "--load" "build.el"))))))))
 
-(define-public emacs-exwm
-  (package
-    (inherit heresy:emacs-exwm)
-    (name "local-emacs-exwm")
-    (propagated-inputs
-     (list gnu:emacs-xelb))))
-
 emacs-stuff
