@@ -9,7 +9,7 @@
 
 (load "./linux.scm")
 (define-module (nongnu system install)
-  #:use-module ((my-local-packages)  #:prefix local:)
+  #:use-module ((my-linux-package)  #:prefix local:)
   #:use-module (guix channels)
   #:use-module (guix gexp)
   #:use-module (gnu packages curl)
