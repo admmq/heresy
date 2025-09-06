@@ -23,6 +23,7 @@
   #:use-module (gnu services base)
   #:use-module (gnu system)
   #:use-module (gnu system install)
+  #:use-module (gnu system linux-initrd)
   #:use-module (nongnu packages linux)
   #:export (installation-os-nonfree))
 
@@ -57,6 +58,8 @@
                            "rtw89core.disable_ps_mode=y"
                            %default-kernel-arguments))
     (firmware (list linux-firmware))
+    (initrd-modules (append (list "hv_storvsc" "hv_vmbus" "hv_utils")
+                            %base-initrd-modules))
     (packages
       (append
         (list curl

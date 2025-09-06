@@ -7,7 +7,7 @@
 (define-public my-linux-package
   (package
     (inherit (customize-linux
-              #:linux linux-6.14))
+              #:linux linux-6.16))
     (name "my-linux-package")
     (version "v6.14")
     (source
