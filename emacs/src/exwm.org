@@ -1,5 +1,15 @@
 * EXWM
 
+Here I define some additional functions, mostly some useful tools.
+#+BEGIN_SRC emacs-lisp
+  (defun stuff-exwm-set-wallpaper (wallpaperPath)
+    (shell-command (concat "feh --bg-scale "
+                           wallpaperPath)))
+
+  (defun stuff-exwm-set-keyboard-layouts ()
+    (shell-command "setxkbmap -model pc105 -layout us,ara,ru -option 'grp:alt_shift_toggle'"))
+#+END_SRC
+
 Here I define a hook, so exwm can switch monitors when I connect my laptop. I definately should rewrite it.
 #+BEGIN_SRC emacs-lisp
   (defun exwm-change-screen-hook ()
@@ -21,7 +31,6 @@ Here I define a hook, so exwm can switch monitors when I connect my laptop. I de
          "--output" built-in-display
          "--mode" "1920x1200" "--pos" "0x0" "--rotate" "normal")
         (setq exwm-randr-workspace-monitor-plist (list 0 external-display)))))
-
 
   (defun cut-newline-character (string)
     (substring string 0 (- (length string) 1)))
@@ -167,9 +176,9 @@ All of these also were taken from the [[https://github.com/emacs-exwm/exwm/wiki/
     ;; Enables screen resize when I change my monitor.
     (exwm-randr-mode 1)
 
-    ;; Do not forget to enable EXWM. It will start by itself when things are
-    ;; ready.  You can put it _anywhere_ in your configuration.
-    (exwm-enable))
+    (stuff-exwm-set-keyboard-layouts)
+
+    (exwm-wm-mode))
 #+END_SRC
 I probably shoud change it one day...
 

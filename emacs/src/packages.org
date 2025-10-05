@@ -6,13 +6,16 @@ Here I load packages I use.
     (use-package spacious-padding
       :config
       (setq spacious-padding-widths
-            '( :internal-border-width 15
-               :header-line-width 4
-               :mode-line-width 0
-               :tab-width 4
-               :right-divider-width 30
-               :scroll-bar-width 8))
-      (spacious-padding-mode 1)))
+            '(:internal-border-width 15
+              :header-line-width 4
+              :mode-line-width 0
+              :tab-width 4
+              :right-divider-width 30
+              :scroll-bar-width 8))
+      (spacious-padding-mode 1))
+    (use-package evil
+      :config
+      (evil-mode 1)))
 #+END_SRC
 
 #+BEGIN_SRC emacs-lisp

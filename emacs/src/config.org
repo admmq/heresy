@@ -32,23 +32,27 @@ Also I defined a function to set variables I prefer.
                   backup-directory-alist '(("." . "~/.emacs-saves/"))
                   delete-old-versions t
                   kept-new-versions 6
-                  kept-old-versions 2
+                  kept-old-versions 2                
 
-                  header-line-format mode-line-format
-                  mode-line-format nil
+                  ;; header-line-format mode-line-format
+                  ;; mode-line-format nil
 
                   package-archives '(("gnu" . "https://elpa.gnu.org/packages/")
                                      ("nongnu" . "https://elpa.nongnu.org/nongnu/")
                                      ("melpa" . "https://melpa.org/packages/")))
 
+    (when (display-graphic-p)
+      (scroll-bar-mode -1)
+      (tool-bar-mode -1))
     (menu-bar-mode -1)
     (electric-pair-mode)
 
-    (load-theme 'tsdh-light t)
+    (load-theme 'tsdh-light t))
 
-    (when (display-graphic-p)
-      (scroll-bar-mode -1)
-      (tool-bar-mode -1)))
+  (defun stuff-config-set-header-line ()
+    (setq-default
+     header-line-format mode-line-format
+     mode-line-format nil))
 #+END_SRC
 
 #+BEGIN_SRC emacs-lisp
