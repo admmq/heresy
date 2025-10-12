@@ -7,7 +7,7 @@
 (operating-system
   (initrd-modules (append (list "hv_storvsc" "hv_vmbus" "hv_utils")
                           %base-initrd-modules))
-  (host-name "netshare")
+  (host-name "storage")
   (timezone "Europe/Moscow")
   (locale "en_US.utf8")
 
@@ -71,13 +71,12 @@
 map to guest = Bad User
 logging = syslog@1
 
-[SharedFolder]
-path = /public
+[Storage]
+path = /Storage
 browseable = yes
 writable = yes
 guest ok = no
-read only = no"))))
-                          )
+read only = no")))))
 		    heresy:%base-services))
 
   (name-service-switch %mdns-host-lookup-nss))
