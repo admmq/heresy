@@ -9,7 +9,7 @@
     (inherit (customize-linux
               #:linux linux-6.16))
     (name "my-linux-package")
-    (version "v6.14")
+    (version "v6.16")
     (source
      (origin
        (method git-fetch)
@@ -18,6 +18,6 @@
              (commit version)))
        (file-name (git-file-name name version))
        (sha256
-        (base32 "117x58ynw6n2cl09jh5q49f2nm64wlfn5r5han8an42y5zmk2ng4"))))))
+        (base32 "0j9a4hhlx7a1w8q3h2rhv5iz30xxai1kkrwia855r8d81kpfmmpc"))))))
 
 my-linux-package
