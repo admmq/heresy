@@ -21,38 +21,38 @@ For now I am using built in. But maybe in future I will use Nerd Fonts.
 
 Also I defined a function to set variables I prefer.
 #+BEGIN_SRC emacs-lisp
-  (defun stuff-config-set-variables ()
-    (setq-default tab-width 4
-                  indent-tabs-mode nil
-                  cursor-type 'bar
-                  inhibit-startup-message t
-                  dired-listing-switches "-alFh"
+    (defun stuff-config-set-variables ()
+      (setq-default tab-width 4
+                    indent-tabs-mode nil
+                    cursor-type 'bar
+                    inhibit-startup-message t
+                    dired-listing-switches "-alFh"
 
-                  backup-by-copying t
-                  backup-directory-alist '(("." . "~/.emacs-saves/"))
-                  delete-old-versions t
-                  kept-new-versions 6
-                  kept-old-versions 2                
+                    auto-revert-interval 0.5
+                    global-auto-revert-mode t
 
-                  ;; header-line-format mode-line-format
-                  ;; mode-line-format nil
+                    backup-by-copying t
+                    backup-directory-alist '(("." . "~/.emacs-saves/"))
+                    delete-old-versions t
+                    kept-new-versions 6
+                    kept-old-versions 2
 
-                  package-archives '(("gnu" . "https://elpa.gnu.org/packages/")
-                                     ("nongnu" . "https://elpa.nongnu.org/nongnu/")
-                                     ("melpa" . "https://melpa.org/packages/")))
+                    package-archives '(("gnu" . "https://elpa.gnu.org/packages/")
+                                       ("nongnu" . "https://elpa.nongnu.org/nongnu/")
+                                       ("melpa" . "https://melpa.org/packages/")))
 
-    (when (display-graphic-p)
-      (scroll-bar-mode -1)
-      (tool-bar-mode -1))
-    (menu-bar-mode -1)
-    (electric-pair-mode)
+      (when (display-graphic-p)
+        (scroll-bar-mode -1)
+        (tool-bar-mode -1))
+      (menu-bar-mode -1)
+      (electric-pair-mode)
 
-    (load-theme 'tsdh-light t))
+      (load-theme 'tsdh-light t))
 
-  (defun stuff-config-set-header-line ()
-    (setq-default
-     header-line-format mode-line-format
-     mode-line-format nil))
+    (defun stuff-config-set-header-line ()
+      (setq-default
+       header-line-format mode-line-format
+       mode-line-format nil))
 #+END_SRC
 
 #+BEGIN_SRC emacs-lisp

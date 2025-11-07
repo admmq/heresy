@@ -15,7 +15,10 @@ Here I load packages I use.
       (spacious-padding-mode 1))
     (use-package evil
       :config
-      (evil-mode 1)))
+      (evil-mode 0))
+    (use-package pdf-tools
+      :config
+      (pdf-loader-install)))
 #+END_SRC
 
 #+BEGIN_SRC emacs-lisp
