@@ -1,8 +1,24 @@
 (use-modules (gnu) (gnu system nss)
              (gnu system privilege)
+             (gnu services shepherd)
+             (gnu packages java)
              ((heresy srvcs) #:prefix heresy:))
 (use-service-modules ssh networking avahi dbus samba)
 (use-package-modules bootloaders libusb nfs linux)
+
+(define telehost-service-type
+  (shepherd-service-type
+    'telehost
+    (const (shepherd-service
+	        (documentation "none")
+	        (provision '(telehost))
+            (stop  #~(make-kill-destructor))
+            (start #~(make-forkexec-constructor
+                      (list #$(file-append openjdk17 "/bin/java")
+                            "-Xmx256m" "-jar" "/home/user/TeleHostManager.jar")
+                      #:log-file "/var/log/telehost.log"))))
+    #f
+    (description "my bot")))
 
 (operating-system
   (initrd-modules (append (list "hv_storvsc" "hv_vmbus" "hv_utils")
@@ -52,12 +68,14 @@
                                           (addresses
                                            (list (network-address
                                                   (device "eth0")
-                                                  (value "192.168.1.3/24"))))
+                                                  (value "192.168.1.7/24"))))
                                           (routes
                                            (list (network-route
                                                   (destination "default")
                                                   (gateway "192.168.1.1"))))
                                           (name-servers '("8.8.8.8")))))
+
+                          (service telehost-service-type)
 
                           ;; The D-Bus clique.
                           (service avahi-service-type)
@@ -70,13 +88,33 @@
 [global]
 map to guest = Bad User
 logging = syslog@1
+security = user
+server min protocol = SMB2
+server max protocol = SMB3
+smb encrypt = auto
+ntlm auth = yes
+vfs objects = catia fruit streams_xattr
+fruit:metadata = stream
+fruit:model = MacSamba
+fruit:veto_appledouble = no
+fruit:posix_rename = yes
+fruit:zero_file_id = yes
+fruit:wipe_intentionally_left_blank_rfork = yes
+fruit:delete_empty_adfiles = yes
+fruit:time machine = yes
 
-[Storage]
-path = /Storage
+[storage]
+path = /storage
 browseable = yes
 writable = yes
 guest ok = no
-read only = no")))))
-		    heresy:%base-services))
+read only = no
+public = yes
+force user = nobody
+force group = nogroup
+create mask = 0777
+directory mask = 0777
+")))))
+		            heresy:%base-services))
 
   (name-service-switch %mdns-host-lookup-nss))
