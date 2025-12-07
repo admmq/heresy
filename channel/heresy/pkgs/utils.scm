@@ -7,6 +7,7 @@
   #:use-module (gnu packages disk)
   #:use-module (gnu packages base)
   #:use-module (gnu packages backup)
+  #:use-module (gnu packages bash)
   #:use-module (guix packages)
   #:use-module (guix git-download)
   #:use-module (guix download)
@@ -76,3 +77,36 @@
       (description "Very usefull package for anyone who wants to make a bootable Windows® USB stick
 using free and open source operating system.")
       (license license:gpl3+))))
+
+(define-public heresy-backuper
+  (let ((revision "0")
+        (commit "5b8e9276f9fb771f508de99684f0a320b8857bfe"))
+    (package
+      (name "heresy-backuper")
+      (version (git-version "0.0.0" revision commit))
+      (source
+       (origin
+         (method git-fetch)
+         (uri (git-reference
+               (url "https://github.com/admmq/heresy")
+               (commit commit)))
+         (file-name (git-file-name name version))
+         (sha256
+          (base32 "0yk3x6nyhmdhyk0whcqsnjgs6q760g3qnfjy57gdx0ngivgh1zqg"))))
+      (build-system trivial-build-system)
+      (arguments
+       `(#:modules ((guix build utils))
+         #:builder
+         (begin
+           (use-modules (guix build utils))
+           (copy-recursively (assoc-ref %build-inputs "source") ".")
+           (substitute* "scripts/backuper"
+             (("/usr/bin/env bash")
+              (search-input-file %build-inputs "/bin/bash")))
+           (install-file "scripts/backuper" (string-append %output "/bin"))
+           #t)))
+      (inputs (list bash))
+      (home-page "https://github.com/admmq/heresy")
+      (synopsis "my backup utility")
+      (description "my backup utility")
+      (license license:wtfpl2))))

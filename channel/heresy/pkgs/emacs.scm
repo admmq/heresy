@@ -42,7 +42,7 @@
       (home-page "https://github.com/admmq/herecy")
       (synopsis "My emacs package")
       (description "My emacs package")
-      (license license:gpl3+))))
+      (license license:wtfpl2))))
 
 (define-public emacs-exwm
   (package
