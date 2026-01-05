@@ -8,17 +8,17 @@
 
 (define telehost-service-type
   (shepherd-service-type
-    'telehost
-    (const (shepherd-service
-	        (documentation "none")
-	        (provision '(telehost))
-            (stop  #~(make-kill-destructor))
-            (start #~(make-forkexec-constructor
-                      (list #$(file-append openjdk17 "/bin/java")
-                            "-Xmx256m" "-jar" "/home/user/TeleHostManager.jar")
-                      #:log-file "/var/log/telehost.log"))))
-    #f
-    (description "my bot")))
+   'telehost
+   (const (shepherd-service
+           (documentation "none")
+           (provision '(telehost))
+           (stop  #~(make-kill-destructor))
+           (start #~(make-forkexec-constructor
+                     (list #$(file-append openjdk17 "/bin/java")
+                           "-Xmx256m" "-jar" "/home/user/TeleHostManager.jar")
+                     #:log-file "/var/log/telehost.log"))))
+   #f
+   (description "my bot")))
 
 (operating-system
   (initrd-modules (append (list "hv_storvsc" "hv_vmbus" "hv_utils")
@@ -37,7 +37,7 @@
                          (mount-point "/")
                          (type "ext4"))
                        (file-system
-		         (device (file-system-label "BOOT"))
+                         (device (file-system-label "BOOT"))
                          (mount-point "/boot/efi")
                          (type "vfat")))
                  %base-file-systems))
@@ -109,12 +109,12 @@ browseable = yes
 writable = yes
 guest ok = no
 read only = no
-public = yes
-force user = nobody
-force group = nogroup
+public = no
+force user = user
+force group = users
 create mask = 0777
 directory mask = 0777
 ")))))
-		            heresy:%base-services))
+                    heresy:%base-services))
 
   (name-service-switch %mdns-host-lookup-nss))
