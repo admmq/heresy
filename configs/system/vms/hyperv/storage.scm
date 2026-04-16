@@ -21,7 +21,8 @@
    (description "my bot")))
 
 (operating-system
-  (initrd-modules (append (list "hv_storvsc" "hv_vmbus" "hv_utils")
+  (initrd-modules (append (list "hv_storvsc" "hv_vmbus" "hv_utils"
+                                "hid-hyperv" "hv_balloon" "hyperv_drm")
                           %base-initrd-modules))
   (host-name "storage")
   (timezone "Europe/Moscow")
