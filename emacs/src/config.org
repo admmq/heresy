@@ -45,9 +45,11 @@ Also I defined a function to set variables I prefer.
       (load-theme 'tsdh-light t)
       (scroll-bar-mode -1)
       (tool-bar-mode -1))
+    (with-eval-after-load 'tramp
+      (add-to-list 'tramp-remote-path 'tramp-own-remote-path))
     (menu-bar-mode -1)
     (electric-pair-mode))
-  
+
   (defun stuff-config-set-header-line ()
     (setq-default
      header-line-format mode-line-format
