@@ -1,0 +1,4 @@
+https://mirrors.aliyun.com/postmarketOS/extra-repos/systemd/v25.12
+https://mirrors.aliyun.com/postmarketOS/v25.12
+http://dl-cdn.alpinelinux.org/alpine/v3.23/main
+http://dl-cdn.alpinelinux.org/alpine/v3.23/community

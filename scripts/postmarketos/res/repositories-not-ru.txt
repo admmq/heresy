@@ -1,0 +1,4 @@
+http://mirror.postmarketos.org/postmarketos/extra-repos/systemd/v25.12
+http://mirror.postmarketos.org/postmarketos/v25.12
+http://dl-cdn.alpinelinux.org/alpine/v3.23/main
+http://dl-cdn.alpinelinux.org/alpine/v3.23/community

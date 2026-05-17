@@ -1,0 +1,13 @@
+UseBridges 1
+
+HTTPTunnelPort 9080
+
+ClientTransportPlugin webtunnel exec /usr/local/bin/webtunnel
+
+# update links here
+Bridge webtunnel 
+Bridge webtunnel 
+Bridge webtunnel 
+Bridge webtunnel 
+
+ExitNodes  {us} StrictNodes 1
