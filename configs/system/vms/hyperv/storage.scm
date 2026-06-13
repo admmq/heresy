@@ -1,6 +1,7 @@
 (use-modules (gnu) (gnu system nss)
              (gnu system privilege)
              (gnu services shepherd)
+             (gnu services mcron)
              (gnu packages java)
              ((heresy srvcs) #:prefix heresy:))
 (use-service-modules ssh networking avahi dbus samba)
@@ -21,71 +22,75 @@
    (description "my bot")))
 
 (operating-system
-  (initrd-modules (append (list "hv_storvsc" "hv_vmbus" "hv_utils"
-                                "hid-hyperv" "hv_balloon" "hyperv_drm")
-                          %base-initrd-modules))
-  (host-name "storage")
-  (timezone "Europe/Moscow")
-  (locale "en_US.utf8")
+ (initrd-modules (append (list "hv_storvsc" "hv_vmbus" "hv_utils"
+                               "hid-hyperv" "hv_balloon" "hyperv_drm")
+                         %base-initrd-modules))
+ (host-name "storage")
+ (timezone "Europe/Moscow")
+ (locale "en_US.utf8")
 
-  (bootloader (bootloader-configuration
-               (bootloader grub-efi-bootloader)
-               (targets '("/boot/efi"))))
+ (bootloader (bootloader-configuration
+              (bootloader grub-efi-bootloader)
+              (targets '("/boot/efi"))))
 
-  (file-systems (append
-                 (list (file-system
-                         (device (file-system-label "ROOT"))
-                         (mount-point "/")
-                         (type "ext4"))
-                       (file-system
-                         (device (file-system-label "BOOT"))
-                         (mount-point "/boot/efi")
-                         (type "vfat")))
-                 %base-file-systems))
+ (file-systems (append
+                (list (file-system
+                       (device (file-system-label "ROOT"))
+                       (mount-point "/")
+                       (type "ext4"))
+                      (file-system
+                       (device (file-system-label "BOOT"))
+                       (mount-point "/boot/efi")
+                       (type "vfat")))
+                %base-file-systems))
 
-  (users (cons (user-account
-                (name "user")
-                (comment "λ")
-                (group "users")
-                (supplementary-groups '("wheel" "netdev")))
-               %base-user-accounts))
+ (users (cons (user-account
+               (name "user")
+               (comment "λ")
+               (group "users")
+               (supplementary-groups '("wheel" "netdev")))
+              %base-user-accounts))
 
-  (packages %base-packages)
+ (packages %base-packages)
 
-  (services (append (list (service openssh-service-type)
-                          ;; Add udev rules for MTP devices so that non-root users can access
-                          ;; them.
-                          (simple-service 'mtp udev-service-type (list libmtp))
+ (services (append
+            (list (service openssh-service-type)
+                  ;; Add udev rules for MTP devices so that non-root users can access
+                  ;; them.
+                  (simple-service 'mtp udev-service-type (list libmtp))
 
-                          ;; Allow desktop users to also mount NTFS and NFS file systems
-                          ;; without root.
-                          (simple-service 'mount-setuid-helpers privileged-program-service-type
-                                          (map file-like->setuid-program
-                                               (list (file-append nfs-utils "/sbin/mount.nfs")
-                                                     (file-append ntfs-3g "/sbin/mount.ntfs-3g"))))
+                  ;; Allow desktop users to also mount NTFS and NFS file systems
+                  ;; without root.
+                  (simple-service 'mount-setuid-helpers privileged-program-service-type
+                                  (map file-like->setuid-program
+                                       (list (file-append nfs-utils "/sbin/mount.nfs")
+                                             (file-append ntfs-3g "/sbin/mount.ntfs-3g"))))
 
-                          (service static-networking-service-type
-                                   (list (static-networking
-                                          (addresses
-                                           (list (network-address
-                                                  (device "eth0")
-                                                  (value "192.168.1.7/24"))))
-                                          (routes
-                                           (list (network-route
-                                                  (destination "default")
-                                                  (gateway "192.168.1.1"))))
-                                          (name-servers '("8.8.8.8")))))
+                  (simple-service 'backuper mcron-service-type
+                                  (list #~(job "0 * * * *" "backuper")))
 
-                          (service telehost-service-type)
+                  (service static-networking-service-type
+                           (list (static-networking
+                                  (addresses
+                                   (list (network-address
+                                          (device "eth0")
+                                          (value "192.168.1.254/24"))))
+                                  (routes
+                                   (list (network-route
+                                          (destination "default")
+                                          (gateway "192.168.1.1"))))
+                                  (name-servers '("8.8.8.8")))))
 
-                          ;; The D-Bus clique.
-                          (service avahi-service-type)
-                          (service polkit-service-type)
-                          (service dbus-root-service-type)
-                          (service ntp-service-type)
-                          (service samba-service-type (samba-configuration
-                                                       (enable-smbd? #t)
-                                                       (config-file (plain-file "smb.conf" "\
+                  (service telehost-service-type)
+
+                  ;; The D-Bus clique.
+                  (service avahi-service-type)
+                  (service polkit-service-type)
+                  (service dbus-root-service-type)
+                  (service ntp-service-type)
+                  (service samba-service-type (samba-configuration
+                                               (enable-smbd? #t)
+                                               (config-file (plain-file "smb.conf" "\
 [global]
 map to guest = Bad User
 logging = syslog@1
@@ -116,6 +121,6 @@ force group = users
 create mask = 0777
 directory mask = 0777
 ")))))
-                    heresy:%base-services))
+            heresy:%base-services))
 
-  (name-service-switch %mdns-host-lookup-nss))
+ (name-service-switch %mdns-host-lookup-nss))

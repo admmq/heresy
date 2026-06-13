@@ -9,9 +9,15 @@ fi
 today=$(date +"%d-%m-%Y")
 target_directory_name="storage"
 target_directory="/$target_directory_name"
-backuper_directory="$HOME/Backuper"
+backuper_directory="/tmp/Backuper"
 result_archive="$backuper_directory/$today".tar
-destination_directory="/home/user/Mnt"
+destination_directory="/home/user/Backuper"
+result_filename="$destination_directory/$today.tar"
+
+if [ -e $result_filename ]; then
+    echo "backup already exists: $result_filename"
+    exit 0
+fi
 
 mkdir $backuper_directory
 cp -rv $target_directory $backuper_directory
