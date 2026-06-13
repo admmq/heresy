@@ -80,7 +80,7 @@ using free and open source operating system.")
 
 (define-public heresy-backuper
   (let ((revision "0")
-        (commit "5b8e9276f9fb771f508de99684f0a320b8857bfe"))
+        (commit "ffd9fbbf59b53ea72fa06374ba5f83648a79ac32"))
     (package
       (name "heresy-backuper")
       (version (git-version "0.0.0" revision commit))
@@ -92,7 +92,7 @@ using free and open source operating system.")
                (commit commit)))
          (file-name (git-file-name name version))
          (sha256
-          (base32 "0yk3x6nyhmdhyk0whcqsnjgs6q760g3qnfjy57gdx0ngivgh1zqg"))))
+          (base32 "0cn61kkbdal4pp6xkiz3pa8ms9brnp282x630gk1xidjym8r7kai"))))
       (build-system trivial-build-system)
       (arguments
        `(#:modules ((guix build utils))
@@ -110,3 +110,5 @@ using free and open source operating system.")
       (synopsis "my backup utility")
       (description "my backup utility")
       (license license:wtfpl2))))
+
+heresy-backuper
