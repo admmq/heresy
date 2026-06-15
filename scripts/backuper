@@ -1,34 +1,57 @@
 #!/usr/bin/env bash
 set -e
 
+function dateDdMmYyToIso {
+    echo $(echo "$1" | sed 's|\([0-9]*\)-\([0-9]*\)-\([0-9]*\)|\3-\2-\1|')
+}
+
 if [[ "$EUID" -ne 0 ]]; then
     echo "This script must be run as root. Please use 'sudo'."
     exit 1
 fi
 
-today=$(date +"%d-%m-%Y")
-target_directory_name="storage"
-target_directory="/$target_directory_name"
-backuper_directory="/tmp/Backuper"
-result_archive="$backuper_directory/$today".tar
-destination_directory="/home/user/Backuper"
-result_filename="$destination_directory/$today.tar"
+backup_interval_days=10
+DEBUG=yes
 
-if [ -e $result_filename ]; then
-    echo "backup already exists: $result_filename"
+today=$(date -I)
+target_directory="/storage"
+destination_directory="/home/user/Backuper"
+result="$destination_directory/$today.tar"
+
+if [[ $DEBUG = "yes" ]]
+then
+    echo "today: $today"
+    echo "target_directory: $target_directory"
+    echo "destination_directory: $destination_directory"
+    echo "result: $result"
+fi
+
+latest_backup=$(ls $destination_directory | grep .tar | tail -n 1)
+if [[ ! "$latest_backup" = "" ]]
+then
+    latest_backup_date=${latest_backup%.tar}
+
+    days_since_last_backup=$(( ($(date -d "$today" +%s) - $(date -d "$latest_backup_date" +%s)) / 86400 ))
+    if (( days_since_last_backup <= 10 ))
+    then
+        echo "backup interval (days): $backup_interval_days"
+        echo "the last backup was recently: $latest_backup"
+        exit 0
+    fi
+fi
+
+if [ -e $result ]; then
+    echo "backup already exists: $result"
     exit 0
 fi
 
-mkdir $backuper_directory
-cp -rv $target_directory $backuper_directory
-tar -cvf $result_archive "$backuper_directory/$target_directory_name"
 
-if [ -e $result_archive ]; then
-    echo "backup created: $result_archive"
+echo "starting backup"
+tar -cvf $result $target_directory
+
+if [ -e $result ]; then
+    echo "backup created: $result"
 else
-    echo "something went wrong: $result_archive"
+    echo "something went wrong: $result"
 fi
 
-mv -v $result_archive "$destination_directory"
-rm -rf $backuper_directory && echo "$backuper_directory is deleted" \
-        || echo "something went wrong with $backuper_directory"
