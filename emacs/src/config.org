@@ -47,8 +47,7 @@ Also I defined a function to set variables I prefer.
       (tool-bar-mode -1))
     (with-eval-after-load 'tramp
       (add-to-list 'tramp-remote-path 'tramp-own-remote-path))
-    (menu-bar-mode -1)
-    (electric-pair-mode))
+    (menu-bar-mode -1))
 
   (defun stuff-config-set-header-line ()
     (setq-default
