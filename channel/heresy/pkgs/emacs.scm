@@ -12,7 +12,7 @@
   #:use-module (guix build-system emacs))
 
 (define-public emacs-stuff
-  (let ((commit "fa97cfcd39622df8f05caf81ec6cebc6cd033273")
+  (let ((commit "0ca7a6e111bc9dcb2a5d66d6cf9864350821de94")
         (revision "0"))
     (package
       (name "emacs-stuff")
@@ -25,7 +25,7 @@
                 (file-name (git-file-name name version))
                 (sha256
                  (base32
-                  "1ns6pmw3054ci01jh7hqxq9fyjjmf62ar6pngm3ydnjq9yn0804a"))))
+                  "1gd8cpfwrlwllq7n2chy8dbz5j2dq6clhb5apadxjdwdrvhx8v5h"))))
       (build-system emacs-build-system)
       (arguments
        '(#:include '("\\.el$")
