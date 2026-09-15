@@ -1,0 +1,16 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "backuper"
+version = "0.1.0"
+description = "Simple tar backup utility"
+requires-python = ">=3.10"
+
+[project.scripts]
+Backuper = "backuper.cli:main"
+
+[tool.setuptools]
+package-dir = {backuper = "src"}
+packages = ["backuper"]
