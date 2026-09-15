@@ -8,10 +8,12 @@
   #:use-module (gnu packages base)
   #:use-module (gnu packages backup)
   #:use-module (gnu packages bash)
+  #:use-module (gnu packages python-build)
+  #:use-module (guix gexp)
   #:use-module (guix packages)
   #:use-module (guix git-download)
-  #:use-module (guix download)
-  #:use-module (guix build-system trivial))
+  #:use-module (guix build-system trivial)
+  #:use-module (guix build-system pyproject))
 
 (define-public woeusb
   (let ((revision "0")
@@ -80,10 +82,10 @@ using free and open source operating system.")
 
 (define-public heresy-backuper
   (let ((revision "0")
-        (commit "389047cbef4433e25e810b12fb28fb233b68db98"))
+        (commit "747bf4cbf8f82bb06010cae31d08a8f6121d63a4"))
     (package
       (name "heresy-backuper")
-      (version (git-version "0.0.0" revision commit))
+      (version (git-version "0.0.1" revision commit))
       (source
        (origin
          (method git-fetch)
@@ -92,20 +94,18 @@ using free and open source operating system.")
                (commit commit)))
          (file-name (git-file-name name version))
          (sha256
-          (base32 "13yicwgfcp3s9f3m53xrjx5n6cnbcy5hmw0z3z92kbqq6pg3h2cq"))))
-      (build-system trivial-build-system)
-      (arguments
-       `(#:modules ((guix build utils))
-         #:builder
-         (begin
-           (use-modules (guix build utils))
-           (copy-recursively (assoc-ref %build-inputs "source") ".")
-           (substitute* "scripts/backuper"
-             (("/usr/bin/env bash")
-              (search-input-file %build-inputs "/bin/bash")))
-           (install-file "scripts/backuper" (string-append %output "/bin"))
-           #t)))
-      (inputs (list bash))
+          (base32 "110rmzjjkpw3jh07p8s1jzsqb9rny89z1czb5ss030hb382lwpqq"))))
+      (build-system pyproject-build-system)
+      (arguments (list
+                  #:test-flags
+                  #~(list "discover" "-s" "tests")
+
+                  #:phases
+                  #~(modify-phases %standard-phases
+                    (add-after 'unpack 'chdir
+                      (lambda _
+                        (chdir "scripts/Backuper"))))))
+      (native-inputs (list python-setuptools python-wheel))
       (home-page "https://github.com/admmq/heresy")
       (synopsis "my backup utility")
       (description "my backup utility")
