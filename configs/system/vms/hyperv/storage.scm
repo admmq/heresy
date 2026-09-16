@@ -67,7 +67,10 @@
                                              (file-append ntfs-3g "/sbin/mount.ntfs-3g"))))
 
                   (simple-service 'backuper mcron-service-type
-                                  (list #~(job "0 * * * *" "/home/user/.guix-profile/bin/backuper")))
+                                  (list #~(job "0 * * * *"
+                                               (string-append "/home/user/.guix-profile/bin/Backuper"
+                                                              " /storage"
+                                                              " /home/user/Backuper"))))
 
                   (service static-networking-service-type
                            (list (static-networking
