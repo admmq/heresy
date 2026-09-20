@@ -1,4 +1,3 @@
-(load "../misc/linux.scm")
 (use-modules (gnu) (gnu system nss)
              (gnu packages image-viewers)
              (gnu packages compton)
@@ -10,7 +9,7 @@
              (srfi srfi-1)
              ((heresy srvcs) #:prefix heresy:)
              ((heresy pkgs emacs) #:prefix heresy:)
-             ((my-linux-package)  #:prefix local:))
+             ((heresy pkgs linux) #:prefix heresy:))
 
 (use-service-modules desktop linux)
 (use-package-modules bootloaders certs terminals ssh fonts
@@ -22,7 +21,7 @@
   (timezone "Europe/Moscow")
   (locale "en_US.utf8")
 
-  (kernel local:my-linux-package)
+  (kernel heresy:my-linux-package)
   (kernel-arguments (cons* "modprobe.blacklist=pcspkr,snd_pcsp"
                            "rtw89_pci.disable_clkreq=y" "rtw89_pci.disable_aspm_l1=y" "rtw89_pci.disable_aspm_l1ss=y"
                            "rtw89pci.disable_clkreq=y" "rtw89pci.disable_aspm_l1=y" "rtw89pci.disable_aspm_l1ss=y"

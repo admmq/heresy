@@ -1,10 +1,9 @@
-(load "../misc/linux.scm")
 (use-modules (gnu) (gnu system nss)
 	     (nongnu packages linux)
              (nongnu system linux-initrd)
              ((heresy srvcs) #:prefix heresy:)
              ((heresy pkgs emacs) #:prefix heresy:)
-             ((my-local-packages)  #:prefix local:))
+             ((heresy pkgs linux) #:prefix heresy:))
 
 (use-service-modules desktop ssh)
 (use-package-modules bootloaders certs
@@ -15,7 +14,7 @@
   (timezone "Europe/Moscow")
   (locale "en_US.utf8")
 
-  (kernel local:my-linux-package)
+  (kernel heresy:my-linux-package)
   (initrd microcode-initrd)
   (firmware (list linux-firmware
                   sof-firmware))
