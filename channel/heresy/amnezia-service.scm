@@ -1,6 +1,6 @@
 ;;; Guix system service for the Amnezia VPN client's privileged helper.
 
-(define-module (heresy amnezia)
+(define-module (heresy amnezia-service)
   #:use-module (heresy pkgs amnezia)
   #:use-module (gnu services)
   #:use-module (gnu services shepherd)
