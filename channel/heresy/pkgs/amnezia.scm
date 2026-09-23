@@ -11,13 +11,13 @@
   #:use-module (guix build-system qt)
   #:use-module (gnu packages)
   #:use-module (gnu packages gnome)
-  #:use-module (local-packages golang-amnezia)
   #:use-module (gnu packages golang-web)
   #:use-module (gnu packages pkg-config)
   #:use-module (gnu packages qt)
   #:use-module (gnu packages ssh)
   #:use-module (gnu packages tls)
-  #:use-module (gnu packages vpn))
+  #:use-module (gnu packages vpn)
+  #:use-module (heresy pkgs golang-amnezia))
 
 ;;;
 ;;; Vendored sources.
