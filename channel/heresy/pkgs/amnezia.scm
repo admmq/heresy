@@ -154,7 +154,7 @@ geo-based split routing for its Xray/VLESS protocol backend.")
           ;; in-tree upstream contribution would move the patch to
           ;; gnu/packages/patches/ and use the bare filename instead.
           (search-patches
-           "local-packages/patches/amnezia-vpn-add-guix-cmake-find-modules.patch"))))
+           "heresy/patches/amnezia-vpn-add-guix-cmake-find-modules.patch"))))
       (build-system qt-build-system)
       (arguments
        (list
