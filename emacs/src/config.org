@@ -3,6 +3,8 @@
 Here I defined a function for setting fonts depending on operating system I use.
 For now I am using built in. But maybe in future I will use Nerd Fonts.
 #+BEGIN_SRC emacs-lisp
+  ;;; config.el --- Editor configs  -*- lexical-binding: t; -*-
+
   (defun stuff-config-set-font (font-size)
     (let ((set-font (lambda (font-name font-size)
                       (when (member font-name (font-family-list))

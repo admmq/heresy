@@ -2,11 +2,17 @@
 
 Here I load packages I use.
 #+BEGIN_SRC emacs-lisp
-  (defun stuff-packages-load-packages ()
+  ;;; packages.el --- Package setup  -*- lexical-binding: t; -*-
+
+  (defun stuff-packages-load-packages () 
     (use-package evil
       :config
       (evil-mode 1))
+
     (when (display-graphic-p)
+      (use-package emojify
+        :hook (after-init . global-emojify-mode))
+
       (use-package pdf-tools
         :config
         (pdf-loader-install))))
