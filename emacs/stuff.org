@@ -4,6 +4,8 @@ I tried to make it cross platform, but my main focus is [[https://guix.gnu.org/]
 
 First, let's load my modules. I ignore errors, that's needed because of the way Guix build elisp packages.
 #+BEGIN_SRC emacs-lisp
+  ;;; stuff.el --- Entry point  -*- lexical-binding: t; -*-
+
   (require 'stuff/packages "src/packages.el" 'noerror)
   (require 'stuff/config "src/config.el" 'noerror)
   (require 'stuff/exwm "src/exwm.el" 'noerror)

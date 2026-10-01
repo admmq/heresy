@@ -15,6 +15,5 @@ After that, add this to your ~/.emacs
     :config
     (stuff-config-set-font 18)
     (stuff-config-set-variables)
-    (stuff-packages-load-packages)
-    (stuff-config-set-header-line))
+    (stuff-packages-load-packages))
 #+end_src

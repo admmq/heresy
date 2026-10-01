@@ -2,6 +2,8 @@
 
 Here I define some additional functions, mostly some useful tools.
 #+BEGIN_SRC emacs-lisp
+  ;;; exwm.el --- EXWM config -*- lexical-binding: t; -*-
+
   (defun stuff-exwm-set-wallpaper (wallpaperPath)
     (shell-command (concat "feh --bg-scale "
                            wallpaperPath)))

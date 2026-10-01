@@ -1,3 +1,5 @@
+;;; config.el --- Build script -*- lexical-binding: t; -*-
+
 (defun remove-needed-files (files)
   (delete "README.org" files))
 
