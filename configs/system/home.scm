@@ -1,13 +1,14 @@
 (use-modules (gnu) (gnu system nss)
-	     (nongnu packages linux)
+             (nongnu packages linux)
              (nongnu system linux-initrd)
              ((heresy srvcs) #:prefix heresy:)
              ((heresy pkgs emacs) #:prefix heresy:)
-             ((heresy pkgs linux) #:prefix heresy:))
+             ((heresy pkgs linux) #:prefix heresy:)
+             ((heresy amnezia-service) #:prefix heresy:))
 
 (use-service-modules desktop ssh)
 (use-package-modules bootloaders certs
-		     emacs emacs-xyz)
+                     emacs emacs-xyz)
 
 (operating-system
   (host-name "home")
@@ -15,6 +16,8 @@
   (locale "en_US.utf8")
 
   (kernel heresy:my-linux-package)
+  (initrd-modules (append (list "vmd")
+                          %base-initrd-modules))
   (initrd microcode-initrd)
   (firmware (list linux-firmware
                   sof-firmware))
@@ -49,7 +52,9 @@
                     %base-packages))
 
   (services (append (list (service bluetooth-service-type)
-                          (service gnome-desktop-service-type))
+                          (service openssh-service-type)
+                          (service gnome-desktop-service-type)
+                          (service heresy:amnezia-vpn-service-type))
                     heresy:%desktop-services))
 
   (name-service-switch %mdns-host-lookup-nss))

@@ -1,4 +1,4 @@
-(define-module (heresy srvcs)
+(define-module (heresy srvcs system)
   #:use-module (gnu services)
   #:use-module (guix gexp)
   #:use-module ((gnu services base) #:prefix gnu-srvcs:)

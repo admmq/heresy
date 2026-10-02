@@ -1,0 +1,146 @@
+Amnezia's own CMake build doesn't use plain find_package() 
+the normal way. Their top-level CMakeLists.txt hooks in Conan, 
+which intercepts every find_package() call in the whole project.
+For OpenVPN, AmneziaWG, libssh, tun2socks, the Xray bindings 
+and the GeoIP/domain data files, Conan would download prebuilt 
+binaries from Amnezia's own package server to link against.
+This adds CMake Find modules to replace the Conan-based
+dependency discovery.
+
+diff --git a/client/cmake/Modules/Findamnezia-xray-bindings.cmake b/client/cmake/Modules/Findamnezia-xray-bindings.cmake
+new file mode 100644
+index 0000000..ffbbb25
+--- /dev/null
++++ b/client/cmake/Modules/Findamnezia-xray-bindings.cmake
+@@ -0,0 +1,21 @@
++# Locate the Xray-core C static library and header, replacing the
++# Conan "amnezia-xray-bindings" recipe used by upstream amnezia-client.
++# Defines the imported target amnezia::xray-bindings.
++
++find_path(AMNEZIA_XRAY_INCLUDE_DIR NAMES amnezia_xray.h)
++find_library(AMNEZIA_XRAY_LIBRARY NAMES amnezia_xray)
++
++include(FindPackageHandleStandardArgs)
++find_package_handle_standard_args(amnezia-xray-bindings
++  REQUIRED_VARS AMNEZIA_XRAY_LIBRARY AMNEZIA_XRAY_INCLUDE_DIR)
++
++if(amnezia-xray-bindings_FOUND AND NOT TARGET amnezia::xray-bindings)
++  add_library(amnezia::xray-bindings STATIC IMPORTED)
++  set_target_properties(amnezia::xray-bindings PROPERTIES
++    IMPORTED_LOCATION "${AMNEZIA_XRAY_LIBRARY}"
++    INTERFACE_INCLUDE_DIRECTORIES "${AMNEZIA_XRAY_INCLUDE_DIR}")
++  # The Xray-core Go runtime needs to resolve its own symbols and talk to
++  # the platform thread/network APIs when linked into a C/C++ binary.
++  set_property(TARGET amnezia::xray-bindings PROPERTY
++    INTERFACE_LINK_LIBRARIES pthread)
++endif()
+diff --git a/client/cmake/Modules/Findawg-go.cmake b/client/cmake/Modules/Findawg-go.cmake
+new file mode 100644
+index 0000000..59b6224
+--- /dev/null
++++ b/client/cmake/Modules/Findawg-go.cmake
+@@ -0,0 +1,15 @@
++# Locate the amneziawg-go executable as an imported target,
++# replacing the Conan "awg-go" recipe used by upstream amnezia-client.
++# Defines the imported target amnezia::awg-go.
++
++find_program(AWG_GO_EXECUTABLE NAMES amneziawg-go)
++
++include(FindPackageHandleStandardArgs)
++find_package_handle_standard_args(awg-go
++  REQUIRED_VARS AWG_GO_EXECUTABLE)
++
++if(awg-go_FOUND AND NOT TARGET amnezia::awg-go)
++  add_executable(amnezia::awg-go IMPORTED)
++  set_target_properties(amnezia::awg-go PROPERTIES
++    IMPORTED_LOCATION "${AWG_GO_EXECUTABLE}")
++endif()
+diff --git a/client/cmake/Modules/Findlibssh.cmake b/client/cmake/Modules/Findlibssh.cmake
+new file mode 100644
+index 0000000..0d33f59
+--- /dev/null
++++ b/client/cmake/Modules/Findlibssh.cmake
+@@ -0,0 +1,22 @@
++# Locate Guix's libssh package and expose it under the imported
++# target name ssh::ssh, which is what upstream amnezia-client expects
++# (matching the Conan libssh recipe's exported target).  Guix's own
++# libssh-config.cmake (installed by libssh itself) only defines a bare
++# "ssh" target with no "ssh::ssh" alias, so CMake's normal Config-mode
++# lookup for find_package(libssh) is not enough; this Find module
++# (picked up first, since Module mode is tried before Config mode) does
++# the location/target setup directly instead.
++
++find_path(LIBSSH_INCLUDE_DIR NAMES libssh/libssh.h)
++find_library(LIBSSH_LIBRARY NAMES ssh)
++
++include(FindPackageHandleStandardArgs)
++find_package_handle_standard_args(libssh
++  REQUIRED_VARS LIBSSH_LIBRARY LIBSSH_INCLUDE_DIR)
++
++if(libssh_FOUND AND NOT TARGET ssh::ssh)
++  add_library(ssh::ssh UNKNOWN IMPORTED)
++  set_target_properties(ssh::ssh PROPERTIES
++    IMPORTED_LOCATION "${LIBSSH_LIBRARY}"
++    INTERFACE_INCLUDE_DIRECTORIES "${LIBSSH_INCLUDE_DIR}")
++endif()
+diff --git a/client/cmake/Modules/Findopenvpn.cmake b/client/cmake/Modules/Findopenvpn.cmake
+new file mode 100644
+index 0000000..3ef1f98
+--- /dev/null
++++ b/client/cmake/Modules/Findopenvpn.cmake
+@@ -0,0 +1,16 @@
++# Locate the openvpn executable as an imported target,
++# replacing the Conan "openvpn" recipe used by upstream amnezia-client.
++# Defines the imported target openvpn::openvpn, the same name the
++# upstream CMakeLists.txt files expect.
++
++find_program(OPENVPN_EXECUTABLE NAMES openvpn)
++
++include(FindPackageHandleStandardArgs)
++find_package_handle_standard_args(openvpn
++  REQUIRED_VARS OPENVPN_EXECUTABLE)
++
++if(openvpn_FOUND AND NOT TARGET openvpn::openvpn)
++  add_executable(openvpn::openvpn IMPORTED)
++  set_target_properties(openvpn::openvpn PROPERTIES
++    IMPORTED_LOCATION "${OPENVPN_EXECUTABLE}")
++endif()
+diff --git a/client/cmake/Modules/Findtun2socks.cmake b/client/cmake/Modules/Findtun2socks.cmake
+new file mode 100644
+index 0000000..5219768
+--- /dev/null
++++ b/client/cmake/Modules/Findtun2socks.cmake
+@@ -0,0 +1,15 @@
++# Locate the tun2socks executable as an imported target,
++# replacing the Conan "tun2socks" recipe used by upstream amnezia-client.
++# Defines the imported target xjasonlyu::tun2socks.
++
++find_program(TUN2SOCKS_EXECUTABLE NAMES tun2socks)
++
++include(FindPackageHandleStandardArgs)
++find_package_handle_standard_args(tun2socks
++  REQUIRED_VARS TUN2SOCKS_EXECUTABLE)
++
++if(tun2socks_FOUND AND NOT TARGET xjasonlyu::tun2socks)
++  add_executable(xjasonlyu::tun2socks IMPORTED)
++  set_target_properties(xjasonlyu::tun2socks PROPERTIES
++    IMPORTED_LOCATION "${TUN2SOCKS_EXECUTABLE}")
++endif()
+diff --git a/client/cmake/Modules/Findv2ray-rules-dat.cmake b/client/cmake/Modules/Findv2ray-rules-dat.cmake
+new file mode 100644
+index 0000000..ee7f913
+--- /dev/null
++++ b/client/cmake/Modules/Findv2ray-rules-dat.cmake
+@@ -0,0 +1,12 @@
++# Locate the geoip.dat/geosite.dat Xray routing rule data files,
++# replacing the Conan "v2ray-rules-dat" recipe used by upstream
++# amnezia-client.  Does not define an imported target; sets
++# GEOIP_DAT_PATH/GEOSITE_DAT_PATH, as the Conan recipe's
++# cmake_extra_variables did.
++
++find_file(GEOIP_DAT_PATH NAMES geoip.dat PATH_SUFFIXES share/v2ray-rules-dat)
++find_file(GEOSITE_DAT_PATH NAMES geosite.dat PATH_SUFFIXES share/v2ray-rules-dat)
++
++include(FindPackageHandleStandardArgs)
++find_package_handle_standard_args(v2ray-rules-dat
++  REQUIRED_VARS GEOIP_DAT_PATH GEOSITE_DAT_PATH)
