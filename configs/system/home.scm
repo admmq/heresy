@@ -1,10 +1,10 @@
 (use-modules (gnu) (gnu system nss)
              (nongnu packages linux)
              (nongnu system linux-initrd)
-             ((heresy srvcs) #:prefix heresy:)
+             ((heresy srvcs system) #:prefix heresy:)
              ((heresy pkgs emacs) #:prefix heresy:)
              ((heresy pkgs linux) #:prefix heresy:)
-             ((heresy amnezia-service) #:prefix heresy:))
+             ((heresy srvcs amnezia-service) #:prefix heresy:))
 
 (use-service-modules desktop ssh)
 (use-package-modules bootloaders certs

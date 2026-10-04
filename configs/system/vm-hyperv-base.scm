@@ -1,6 +1,6 @@
 (use-modules (gnu) (gnu system nss)
              (gnu system privilege)
-             ((heresy srvcs) #:prefix heresy:))
+             ((heresy srvcs system) #:prefix heresy:))
 (use-service-modules ssh networking avahi dbus)
 (use-package-modules bootloaders libusb nfs linux)
 
