@@ -3,6 +3,7 @@
              (gnu services shepherd)
              (gnu services mcron)
              (gnu packages java)
+             (gnu packages cryptsetup)
              ((heresy srvcs system) #:prefix heresy:)
              ((heresy pkgs utils) #:prefix heresy:))
 (use-service-modules ssh networking avahi dbus samba)
@@ -39,7 +40,8 @@
               %base-user-accounts))
 
  (packages (append
-            (list heresy:heresy-backuper)
+            (list cryptsetup
+                  heresy:heresy-backuper)
             %base-packages))
 
  (services (append
