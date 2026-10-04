@@ -4,22 +4,9 @@
              (gnu services mcron)
              (gnu packages java)
              ((heresy srvcs system) #:prefix heresy:))
+             ((heresy pkgs utils) #:prefix heresy:))
 (use-service-modules ssh networking avahi dbus samba)
 (use-package-modules bootloaders libusb nfs linux)
-
-(define telehost-service-type
-  (shepherd-service-type
-   'telehost
-   (const (shepherd-service
-           (documentation "none")
-           (provision '(telehost))
-           (stop  #~(make-kill-destructor))
-           (start #~(make-forkexec-constructor
-                     (list #$(file-append openjdk17 "/bin/java")
-                           "-Xmx256m" "-jar" "/home/user/TeleHostManager.jar")
-                     #:log-file "/var/log/telehost.log"))))
-   #f
-   (description "my bot")))
 
 (operating-system
  (initrd-modules (append (list "hv_storvsc" "hv_vmbus" "hv_utils"
@@ -51,7 +38,9 @@
                (supplementary-groups '("wheel" "netdev")))
               %base-user-accounts))
 
- (packages %base-packages)
+ (packages (append
+            (list heresy-backuper)
+            %base-packages))
 
  (services (append
             (list (service openssh-service-type)
@@ -68,7 +57,7 @@
 
                   (simple-service 'backuper mcron-service-type
                                   (list #~(job "0 * * * *"
-                                               (string-append "/home/user/.guix-profile/bin/Backuper"
+                                               (string-append "Backuper"
                                                               " /storage"
                                                               " /home/user/Backuper"))))
 
@@ -83,8 +72,6 @@
                                           (destination "default")
                                           (gateway "192.168.1.1"))))
                                   (name-servers '("8.8.8.8")))))
-
-                  (service telehost-service-type)
 
                   ;; The D-Bus clique.
                   (service avahi-service-type)
