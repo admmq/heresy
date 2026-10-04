@@ -1,5 +1,5 @@
 ;; took from https://gitlab.com/nonguix/nonguix/-/blob/master/nongnu/system/install.scm
-;; guix system image --image-type=iso9660 ./install.scm
+;; guix system image --image-type=iso9660 ./vm-hyperv-install.scm
 
 (define-module (nongnu system install)
   #:use-module (nonguix transformations)
