@@ -3,7 +3,7 @@
              (gnu services shepherd)
              (gnu services mcron)
              (gnu packages java)
-             ((heresy srvcs system) #:prefix heresy:))
+             ((heresy srvcs system) #:prefix heresy:)
              ((heresy pkgs utils) #:prefix heresy:))
 (use-service-modules ssh networking avahi dbus samba)
 (use-package-modules bootloaders libusb nfs linux)
