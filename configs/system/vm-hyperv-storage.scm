@@ -39,7 +39,7 @@
               %base-user-accounts))
 
  (packages (append
-            (list heresy-backuper)
+            (list heresy:heresy-backuper)
             %base-packages))
 
  (services (append
