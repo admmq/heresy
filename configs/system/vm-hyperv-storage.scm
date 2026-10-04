@@ -59,7 +59,7 @@
                                   (list #~(job "0 * * * *"
                                                (string-append "Backuper"
                                                               " /storage"
-                                                              " /home/user/Backuper"))))
+                                                              " /root"))))
 
                   (service static-networking-service-type
                            (list (static-networking
