@@ -4,7 +4,7 @@
              ((heresy srvcs system) #:prefix heresy:)
              ((heresy pkgs emacs) #:prefix heresy:)
              ((heresy pkgs linux) #:prefix heresy:)
-             ((heresy srvcs amnezia-service) #:prefix heresy:))
+             ((heresy srvcs amnezia-vpn-service) #:prefix heresy:))
 
 (use-service-modules desktop ssh)
 (use-package-modules bootloaders certs
