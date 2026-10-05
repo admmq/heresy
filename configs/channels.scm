@@ -19,4 +19,4 @@
       (channel
        (name 'heresy)
        (url "https://github.com/admmq/heresy")
-       (branch "update")))
+       (branch "main")))
