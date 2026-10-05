@@ -32,12 +32,12 @@
                        (type "vfat")))
                 %base-file-systems))
 
- (users (cons (user-account
-               (name "user")
-               (comment "λ")
-               (group "users")
-               (supplementary-groups '("wheel" "netdev")))
-              %base-user-accounts))
+ ;; (users (cons (user-account
+ ;;               (name "user")
+ ;;               (comment "λ")
+ ;;               (group "users")
+ ;;               (supplementary-groups '("wheel" "netdev")))
+ ;;              %base-user-accounts))
 
  (packages (append
             (list cryptsetup
