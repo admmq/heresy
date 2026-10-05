@@ -39,7 +39,7 @@
 
   (users (cons (user-account
                 (name "user")
-                (comment "something matters")
+                (comment "λ")
                 (group "users")
                 (supplementary-groups '("wheel" "netdev"
                                         "audio" "video")))
