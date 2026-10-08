@@ -1,4 +1,5 @@
 (define-module (heresy vars)
+  #:use-module (guix channels)
   #:export (%base-substitutes-urls
             %substitutes-urls
             %channels))

@@ -4,7 +4,8 @@
              (gnu home services shells)
              (gnu home services guix)
              (guix gexp)
-             (guix channels))
+             (guix channels)
+             ((heresy vars) #:prefix heresy:))
 
 (home-environment
   (packages (specifications->packages (list "guile"
@@ -28,5 +29,5 @@
                  ;;          (home-bash-configuration
                  ;;           (aliases '(("ls" . "ls --color=auto")))))
                  (service home-channels-service-type
-                          (include "channels.scm")))
+                          heresy:%channels))
            %base-home-services)))
