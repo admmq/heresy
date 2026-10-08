@@ -1,5 +1,6 @@
 **.el
+**.elc
 
-!build.el
-!clean.el
-!.dir-locals.el
+!/stuff.el
+!/clean.el
+!/.dir-locals.el

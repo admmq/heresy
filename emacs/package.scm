@@ -1,29 +1,25 @@
-(define-module (package)
-  #:use-module (guix)
+(use-modules (guix)
+             (guix git-download)
+             (guix build-system emacs)
+             ((guix licenses) #:prefix license:))
 
-  #:use-module (gnu packages image-viewers)
-  #:use-module (gnu packages compton)
-  #:use-module (gnu packages wm)
-
-  #:use-module ((gnu packages emacs-xyz) #:prefix gnu:)
-  #:use-module ((heresy pkgs emacs) #:prefix heresy:)
-  #:use-module ((heresy lib) #:prefix heresy:))
-
-(define-public emacs-stuff
-  (package
-    (inherit heresy:emacs-stuff)
-    (name "local-emacs-stuff")
-    (source (local-file "." name
-                        #:recursive? #t
-                        #:select? heresy:vcs-file?))
-    (arguments
-     '(#:include '("\\.el$")
-       #:exclude '("build.el"
-                   ".dir-locals.el")
-       #:phases
-       (modify-phases %standard-phases
-         (add-after 'unpack 'load-org-files
-           (lambda _
-             (invoke "emacs" "-Q" "--batch" "--load" "build.el"))))))))
-
-emacs-stuff
+(package
+  (name "emacs-stuff")
+  (version "0.0.1")
+  (source (local-file "." "emacs-stuff-checkout"
+                      #:recursive? #t
+                      #:select? (git-predicate (current-source-directory))))
+  (build-system emacs-build-system)
+  (arguments
+   '(#:include '("\\.el$")
+     #:exclude '("clean.el"
+                 ".dir-locals.el")
+     #:phases
+     (modify-phases %standard-phases
+       (add-after 'unpack 'tangle-org-files
+         (lambda _
+           (invoke "emacs" "-Q" "--batch" "--load" "stuff.el"))))))
+  (home-page "https://github.com/admmq/heresy")
+  (synopsis "My literate Emacs config")
+  (description "My literate Emacs config.")
+  (license license:wtfpl2))
