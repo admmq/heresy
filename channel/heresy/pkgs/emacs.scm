@@ -12,7 +12,7 @@
   #:use-module (guix build-system emacs))
 
 (define-public emacs-stuff
-  (let ((commit "0ca7a6e111bc9dcb2a5d66d6cf9864350821de94")
+  (let ((commit "c4cefde57ffe6fbcebdecac964c8447eb06463d2")
         (revision "0"))
     (package
       (name "emacs-stuff")
@@ -25,11 +25,11 @@
                 (file-name (git-file-name name version))
                 (sha256
                  (base32
-                  "1gd8cpfwrlwllq7n2chy8dbz5j2dq6clhb5apadxjdwdrvhx8v5h"))))
+                  "0qv83z9jwsgzrfjvin18ahgq0l79z8z04ajzazsh8mqpcyv87p9q"))))
       (build-system emacs-build-system)
       (arguments
        '(#:include '("\\.el$")
-         #:exclude '("build.el"
+         #:exclude '("clean.el"
                      ".dir-locals.el")
          #:phases
          (modify-phases %standard-phases
@@ -38,8 +38,8 @@
                (chdir "emacs")))
            (add-after 'chdir 'load-org-files
              (lambda _
-               (invoke "emacs" "-Q" "--batch" "--load" "build.el"))))))
-      (home-page "https://github.com/admmq/herecy")
+               (invoke "emacs" "-Q" "--batch" "--load" "stuff.el"))))))
+      (home-page "https://github.com/admmq/heresy")
       (synopsis "My emacs package")
       (description "My emacs package")
       (license license:wtfpl2))))
@@ -87,29 +87,3 @@
                                     (stuff-exwm-set-variables)
                                     (stuff-exwm-config)))))
                 (chmod exwm-executable #o555)))))))))
-
-(define-public emacs-spacious-padding
-  ;; named branch is outdated
-  (let ((commit "216cf9d38c468f2ce7f8685ba19d4d1fcbb87177")
-        (revision "0"))
-    (package
-      (name "emacs-spacious-padding")
-      (version (git-version "0.5.0" revision commit))
-      (source (origin
-                (method git-fetch)
-                (uri (git-reference
-                      (url "https://github.com/protesilaos/spacious-padding.git")
-                      (commit commit)))
-                (file-name (git-file-name name version))
-                (sha256
-                 (base32
-                  "16j568w1w8g2jn4iighvf37mii83x021x2p4dllyki5hz7x5ssjn"))))
-      (build-system emacs-build-system)
-      (home-page "https://github.com/protesilaos/spacious-padding.git")
-      (synopsis "Emacs package for increasing the padding/spacing of frames and windows")
-      (description "This package provides a global minor mode to increase
-the spacing/padding of Emacs windows and frames.The idea is to make editing
-and reading feel more comfortable.  Enable the mode with M-x
-spacious-padding-mode.  Adjust the exact spacing values by modifying the user option
-spacious-padding-widths.")
-      (license license:gpl3+))))
