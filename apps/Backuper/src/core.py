@@ -14,9 +14,14 @@ def date_dd_mm_yy_to_iso(value: str) -> str:
 
 
 class Backuper:
-    def __init__(self, target_directory: str, destination_directory: str, interval_days: int = BACKUP_INTERVAL_DAYS):
+    def __init__(self,
+                 target_directory: str,
+                 destination_directory: str,
+                 ignore_interval: bool,
+                 interval_days: int = BACKUP_INTERVAL_DAYS):
         self.target_directory = target_directory
         self.destination_directory = destination_directory
+        self.ignore_interval = ignore_interval
         self.interval_days = interval_days
         self.today = date.today().isoformat()
         self.result = os.path.join(self.destination_directory, f"{self.today}.tar")
@@ -84,7 +89,7 @@ class Backuper:
     def run(self) -> int:
         self.print_debug_info()
 
-        if self.is_backup_recent():
+        if self.is_backup_recent() and not self.ignore_interval:
             return 0
 
         if os.path.exists(self.result):

@@ -36,6 +36,11 @@ def parse_args() -> argparse.Namespace:
                         nargs="?", 
                         default=default_destination, 
                         help="directory to store backups in")
+    parser.add_argument('--ignore-interval',
+                        action=argparse.BooleanOptionalAction,
+                        default=False,
+                        help="flag to ignore interval and to force backup")
+
     return parser.parse_args()
 
 
@@ -52,5 +57,6 @@ def main() -> int:
     backuper = Backuper(
         target_directory=args.target_directory,
         destination_directory=args.destination_directory,
+        ignore_interval=args.ignore_interval
     )
     return backuper.run()
