@@ -18,7 +18,7 @@
                                             "emacs-emojify"
                                             "emacs-vterm"
                                             "emacs-evil"
-                                            "emacs"
+                                            "emacs-pgtk"
                                             "vlc"
                                             "nss-certs"
                                             "curl"

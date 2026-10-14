@@ -82,7 +82,7 @@ using free and open source operating system.")
 
 (define-public heresy-backuper
   (let ((revision "0")
-        (commit "747bf4cbf8f82bb06010cae31d08a8f6121d63a4"))
+        (commit "e7a08aa95e5773c5d8fa396b7e163e7b0f0d5632"))
     (package
       (name "heresy-backuper")
       (version (git-version "0.0.1" revision commit))
@@ -94,7 +94,7 @@ using free and open source operating system.")
                (commit commit)))
          (file-name (git-file-name name version))
          (sha256
-          (base32 "110rmzjjkpw3jh07p8s1jzsqb9rny89z1czb5ss030hb382lwpqq"))))
+          (base32 "0h9q5151l035qvbdiflqbqvgrb6f9kr84cj9zqidsybyh59fqj0s"))))
       (build-system pyproject-build-system)
       (arguments (list
                   #:test-flags
