@@ -82,7 +82,7 @@ using free and open source operating system.")
 
 (define-public heresy-backuper
   (let ((revision "0")
-        (commit "e7a08aa95e5773c5d8fa396b7e163e7b0f0d5632"))
+        (commit "0c1e899db672f26f882809c89195ed5127b83f57"))
     (package
       (name "heresy-backuper")
       (version (git-version "0.0.1" revision commit))
@@ -94,7 +94,7 @@ using free and open source operating system.")
                (commit commit)))
          (file-name (git-file-name name version))
          (sha256
-          (base32 "0h9q5151l035qvbdiflqbqvgrb6f9kr84cj9zqidsybyh59fqj0s"))))
+          (base32 "14m36lpm02vqx371wg9dvknrvvaj5f4imrb27mx8ggymcsgi8k3p"))))
       (build-system pyproject-build-system)
       (arguments (list
                   #:test-flags
@@ -104,7 +104,7 @@ using free and open source operating system.")
                   #~(modify-phases %standard-phases
                     (add-after 'unpack 'chdir
                       (lambda _
-                        (chdir "scripts/Backuper"))))))
+                        (chdir "apps/Backuper"))))))
       (native-inputs (list python-setuptools python-wheel))
       (home-page "https://github.com/admmq/heresy")
       (synopsis "my backup utility")
