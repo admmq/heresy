@@ -53,8 +53,8 @@
 
   (services (append (list (service bluetooth-service-type)
                           (service openssh-service-type)
-                          (service gnome-desktop-service-type)
-                          (service heresy:amnezia-vpn-service-type))
+                          (service gnome-desktop-service-type))
+                          ;; (service heresy:amnezia-vpn-service-type))
                     heresy:%desktop-services))
 
   (name-service-switch %mdns-host-lookup-nss))
