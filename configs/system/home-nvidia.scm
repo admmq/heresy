@@ -9,8 +9,19 @@
              ((heresy srvcs amnezia-vpn-service) #:prefix heresy:))
 
 (use-service-modules desktop sddm ssh xorg)
-(use-package-modules bootloaders certs
-                     emacs emacs-xyz)
+(use-package-modules bootloaders certs display-managers
+                     emacs emacs-xyz glib)
+
+;; SDDM starts no D-Bus session bus for Wayland sessions, and GNOME's session
+;; manager exits right away without one.  Run the session under
+;; dbus-run-session, after SDDM's script has set up the login environment.
+(define sddm-wayland-session-with-dbus
+  (program-file
+   "wayland-session-with-dbus"
+   #~(apply execl #$(file-append sddm "/share/sddm/scripts/wayland-session")
+            #$(file-append sddm "/share/sddm/scripts/wayland-session")
+            #$(file-append dbus "/bin/dbus-run-session") "--"
+            (cdr (command-line)))))
 
 (define %home-os
   (operating-system
@@ -60,7 +71,10 @@
                             (service openssh-service-type)
                             (service gnome-desktop-service-type)
                             (service xfce-desktop-service-type)
-                            (service sddm-service-type))
+                            (service sddm-service-type
+                                     (sddm-configuration
+                                      (session-command
+                                       sddm-wayland-session-with-dbus))))
                             ;; (service heresy:amnezia-vpn-service-type))
                       (modify-services heresy:%desktop-services
                         (delete gdm-service-type))))
