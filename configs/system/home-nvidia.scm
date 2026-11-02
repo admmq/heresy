@@ -59,6 +59,7 @@
     (services (append (list (service bluetooth-service-type)
                             (service openssh-service-type)
                             (service gnome-desktop-service-type)
+                            (service xfce-desktop-service-type)
                             (service sddm-service-type))
                             ;; (service heresy:amnezia-vpn-service-type))
                       (modify-services heresy:%desktop-services
