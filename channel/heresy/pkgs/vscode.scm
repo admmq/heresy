@@ -89,7 +89,7 @@ fields, as something that can be spliced into a G-expression."
 (define-public vscode
   (package
     (name "vscode")
-    (version "1.140.0")
+    (version "1.142.0")
     (source
      (let ((arch (match (%current-system)
                    ("aarch64-linux" "arm64")
@@ -103,9 +103,9 @@ fields, as something that can be spliced into a G-expression."
           (base32
            (match arch
              ("arm64"
-              "19kzawp7zg880r692nsnv538nrznj6m25zs3nc0s3hjbbijsf2cn")
+              "0qky3v7v9yvlz3hpn291mmda6vw91i1xa2b4xcxa3c9978cfak6b")
              ("x64"
-              "1p60dm1k1fmmyns6fya123fiqyimig5jzwrwmwr9bm8kwblk286k")))))))
+              "1q0aw35q6587c1asvd5nxpg6k5aq4kjvsyr8933xqnk86nscrhgw")))))))
     (build-system copy-build-system)
     (arguments
      (list
