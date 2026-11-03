@@ -74,8 +74,8 @@
                             (service sddm-service-type
                                      (sddm-configuration
                                       (session-command
-                                       sddm-wayland-session-with-dbus))))
-                            ;; (service heresy:amnezia-vpn-service-type))
+                                       sddm-wayland-session-with-dbus)))
+                            (service heresy:amnezia-vpn-service-type))
                       (modify-services heresy:%desktop-services
                         (delete gdm-service-type))))
 

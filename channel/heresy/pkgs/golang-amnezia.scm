@@ -248,7 +248,7 @@ by Hysteria and Xray-core).")
            go-google-golang-org-genproto-googleapis-rpc
            go-google-golang-org-grpc
            go-google-golang-org-protobuf
-           go-gvisor-dev-gvisor
+           go-gvisor-dev-gvisor-source
            go-h12-io-socks
            go-lukechampine-com-blake3))
     (home-page "https://github.com/amnezia-vpn/amnezia-xray-core")
@@ -309,7 +309,7 @@ the AmneziaWG transport used elsewhere in the Amnezia VPN client.")
            go-golang-org-x-time
            go-golang-zx2c4-com-wireguard
            go-gopkg-in-yaml-v3
-           go-gvisor-dev-gvisor))
+           go-gvisor-dev-gvisor-source))
     (home-page "https://github.com/xjasonlyu/tun2socks")
     (synopsis "TUN interface that proxies traffic through a SOCKS/Shadowsocks server")
     (description
