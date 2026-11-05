@@ -242,6 +242,31 @@ geo-based split routing for its Xray/VLESS protocol backend.")
                    (string-append
                     "endif() # GUIX: end skip openvpn RUNPATH rewrite\n"
                     "# install drivers")))))
+            (add-after 'install 'install-desktop-entry
+              ;; Upstream installs the desktop entry and icon into the prefix
+              ;; root, next to the systemd unit and scripts with which its
+              ;; /opt-based packages copy them to /usr/share.  Put them where
+              ;; desktop environments look, and drop the rest.
+              (lambda _
+                (let ((apps (string-append #$output "/share/applications"))
+                      (icons (string-append #$output
+                                            "/share/icons/hicolor/512x512/apps")))
+                  (with-directory-excursion #$output
+                    (substitute* "AmneziaVPN.desktop"
+                      (("^Exec=.*")
+                       (string-append "Exec=" #$output "/bin/AmneziaVPN\n"))
+                      (("^Icon=.*")
+                       "Icon=AmneziaVPN\n"))
+                    (mkdir-p apps)
+                    (mkdir-p icons)
+                    (rename-file "AmneziaVPN.desktop"
+                                 (string-append apps "/AmneziaVPN.desktop"))
+                    (rename-file "AmneziaVPN.png"
+                                 (string-append icons "/AmneziaVPN.png"))
+                    (for-each delete-file
+                              '("AmneziaVPN.service"
+                                "post_install.sh"
+                                "post_uninstall.sh"))))))
             (add-after 'qt-wrap 'unwrap-data-files
               (lambda* (#:key outputs #:allow-other-keys)
                 (define bin (string-append (assoc-ref outputs "out") "/bin"))
