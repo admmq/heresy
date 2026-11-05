@@ -26,21 +26,32 @@
                (bootloader grub-efi-bootloader)
                (targets '("/boot/efi"))))
 
+  ;; Everything but the EFI partition is on one LUKS2 partition, set up as
+  ;; in laptop-install.md.  GRUB unlocks it to read /gnu/store and passes the
+  ;; key on to the initrd, so the passphrase is asked only once.  GRUB does
+  ;; that only for a plain luks-device-mapping given by its LUKS UUID; this
+  ;; one is chosen with 'cryptsetup luksFormat --uuid'.
+  (mapped-devices
+   (list (mapped-device
+          (source (uuid "709238c7-4c27-4ed0-b069-a1479ee154f5"))
+          (target "cryptroot")
+          (type luks-device-mapping))))
+
   (file-systems (append
                  (list (file-system
                          (device (file-system-label "ROOT"))
                          (mount-point "/")
-                         (type "ext4"))
+                         (type "ext4")
+                         (dependencies mapped-devices))
                        (file-system
                          (device (file-system-label "BOOT"))
                          (mount-point "/boot/efi")
                          (type "vfat")))
                  %base-file-systems))
 
-  ;; 8 GiB swap file on the root file system, which the initrd mounts before
-  ;; swap is turned on.  Guix doesn't create the file; once, as root:
-  ;;   dd if=/dev/zero of=/swapfile bs=1M count=8192
-  ;;   chmod 600 /swapfile && mkswap /swapfile
+  ;; 8 GiB swap file on the encrypted root file system, which the initrd
+  ;; mounts before swap is turned on.  Guix doesn't create the file;
+  ;; laptop-install.md does.
   (swap-devices (list (swap-space
                        (target "/swapfile"))))
 

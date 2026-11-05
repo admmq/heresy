@@ -7,16 +7,29 @@
   #:export (%desktop-services
             %base-services))
 
-(define %desktop-services
-  (modify-services gnu-srvcs:%desktop-services
+(define %nonguix-signing-key
+  ;; Without it the daemon ignores substitutes.nonguix.org, even though it is
+  ;; in %substitutes-urls, and builds nonguix's packages locally.  Same key as
+  ;; <https://substitutes.nonguix.org/signing-key.pub>.
+  (plain-file "nonguix.pub" "
+(public-key
+ (ecc
+  (curve Ed25519)
+  (q #C1FD53E5D4CE971933EC50C9F307AE2171A2D3B52C804642A7A35F84F3A4EA98#)))"))
+
+(define (with-heresy-substitutes services)
+  (modify-services services
     (gnu-srvcs:guix-service-type
      config => (gnu-srvcs:guix-configuration
-		(inherit config)
-		(substitute-urls heresy:%substitutes-urls)))))
+                (inherit config)
+                (substitute-urls heresy:%substitutes-urls)
+                (authorized-keys
+                 (cons %nonguix-signing-key
+                       (gnu-srvcs:guix-configuration-authorized-keys
+                        config)))))))
+
+(define %desktop-services
+  (with-heresy-substitutes gnu-srvcs:%desktop-services))
 
 (define %base-services
-  (modify-services gnu-srvcs:%base-services
-    (gnu-srvcs:guix-service-type
-     config => (gnu-srvcs:guix-configuration
-		(inherit config)
-		(substitute-urls heresy:%substitutes-urls)))))
+  (with-heresy-substitutes gnu-srvcs:%base-services))
