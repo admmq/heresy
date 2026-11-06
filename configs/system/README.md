@@ -45,4 +45,3 @@ mount /dev/mapper/cryptroot /mnt
 mkdir -p /mnt/boot/efi
 mount /dev/nvme0n1p1 /mnt/boot/efi
 ```
-

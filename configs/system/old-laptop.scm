@@ -1,7 +1,7 @@
 (use-modules (gnu) (gnu system nss)
              (nongnu packages linux)
              (nongnu system linux-initrd)
-             ((heresy vars) #:prefix heresy-vars:)
+             ((heresy vars) #:prefix heresy:)
              ((heresy srvcs system) #:prefix heresy:)
              ((heresy pkgs emacs) #:prefix heresy:)
              ((heresy pkgs linux) #:prefix heresy:)
@@ -23,11 +23,7 @@
   (firmware (list linux-firmware
                   sof-firmware))
 
-  (bootloader heresy-vars:efi-grub-configuration)
-  ;; (bootloader (bootloader-configuration
-  ;;              (bootloader grub-efi-bootloader)
-  ;;              (targets '("/boot/efi"))
-  ;;              (theme (grub-theme (image #f)))))
+  (bootloader heresy:%efi-grub-configuration)
 
   (file-systems (append
                  (list (file-system
@@ -66,24 +62,6 @@
                                     (program (file-append swaylock "/bin/swaylock"))
                                     (using-pam? #t)
                                     (using-setuid? #f)))
-                          ;; The gdm package sets the login-screen logo to the
-                          ;; Guix icon via a gschema override; reset it to
-                          ;; upstream's empty default through dconf.
-                          (simple-service 'gdm-no-logo dconf-service-type
-                                          (list (dconf-profile
-                                                 (name "gdm")
-                                                 (content
-                                                  (list "user-db:user"
-                                                        "system-db:gdm"
-                                                        #~(string-append
-                                                           "file-db:" #$gdm
-                                                           "/share/gdm/greeter-dconf-defaults")))
-                                                 (keyfile
-                                                  (dconf-keyfile
-                                                   (name "00-no-logo")
-                                                   (content
-                                                    (list "[org/gnome/login-screen]"
-                                                          "logo=''")))))))
                           (service heresy:amnezia-vpn-service-type))
                     heresy:%desktop-services))
 
