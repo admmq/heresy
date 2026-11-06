@@ -4,7 +4,8 @@
   #:use-module ((gnu bootloader grub) #:prefix gnu-grub:)
   #:export (%base-substitutes-urls
             %substitutes-urls
-            %channels))
+            %channels
+            %efi-grub-configuration))
 
 (define %base-substitutes-urls
   (list "https://bordeaux.guix.gnu.org"
@@ -40,7 +41,7 @@
          (url "https://github.com/admmq/heresy")
          (branch "main"))))
 
-(define efi-grub-configuration
+(define %efi-grub-configuration
   (gnu-bootloader:bootloader-configuration
    (bootloader gnu-grub:grub-efi-bootloader)
    (targets '("/boot/efi"))

@@ -1,6 +1,7 @@
 (use-modules (gnu) (gnu system nss)
              (nongnu packages linux)
              (nongnu system linux-initrd)
+             ((heresy vars) #:prefix heresy-vars:)
              ((heresy srvcs system) #:prefix heresy:)
              ((heresy pkgs emacs) #:prefix heresy:)
              ((heresy pkgs linux) #:prefix heresy:)
@@ -22,10 +23,11 @@
   (firmware (list linux-firmware
                   sof-firmware))
 
-  (bootloader (bootloader-configuration
-               (bootloader grub-efi-bootloader)
-               (targets '("/boot/efi"))
-               (theme (grub-theme (image #f)))))
+  (bootloader heresy-vars:efi-grub-configuration)
+  ;; (bootloader (bootloader-configuration
+  ;;              (bootloader grub-efi-bootloader)
+  ;;              (targets '("/boot/efi"))
+  ;;              (theme (grub-theme (image #f)))))
 
   (file-systems (append
                  (list (file-system
