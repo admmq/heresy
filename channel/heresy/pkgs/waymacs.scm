@@ -13,7 +13,7 @@
   #:use-module (guix build-system gnu))
 
 (define-public waymacs
-  (let ((commit "e4a2973fa5477c92aacdc0f9cb5fcf7565d42591")
+  (let ((commit "d5b30e19e9bd50e31b431d82a2fc9157e439a262")
         (revision "0"))
     (package
       (name "waymacs")
@@ -26,7 +26,7 @@
                 (file-name (git-file-name name version))
                 (sha256
                  (base32
-                  "184yvzqwk1wxwd5mbyq78fasad49a3j8llmz8j60qk4wl3r5qnnm"))))
+                  "0i5gx8jqdh701dxj69g8myldrw050h6kg6qzvpfdng19b7gbdz47"))))
       (build-system gnu-build-system)
       (arguments
        (list
@@ -73,5 +73,3 @@ and @file{waymacs.el}, which makes all window management decisions.  The
 package also installs a @file{waymacs.desktop} session file for display
 managers.")
       (license license:gpl3+))))
-
-waymacs
