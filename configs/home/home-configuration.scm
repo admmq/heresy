@@ -20,6 +20,7 @@
                                             "emacs-evil"
                                             "emacs-pgtk"
                                             "vlc"
+                                            "openssh"
                                             "nss-certs"
                                             "curl"
                                             "git")))
