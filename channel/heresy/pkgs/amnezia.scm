@@ -4,6 +4,7 @@
   #:use-module (guix download)
   #:use-module (guix gexp)
   #:use-module (guix git-download)
+  #:use-module (guix utils)
   #:use-module (guix build-system trivial)
   #:use-module (guix build-system qt)
   #:use-module (gnu packages)
@@ -99,6 +100,60 @@ domain-list text files).  The Amnezia VPN client uses these to offer
 geo-based split routing for its Xray/VLESS protocol backend.")
     (license license:gpl3+)))
 
+(define %amnezia-vpn-gateway-environment
+  ;; Premium and Free subscription keys only point at Amnezia's API
+  ;; gateway; the client fetches the real config from it in requests
+  ;; encrypted to the gateway's RSA key.  Upstream compiles that key and the
+  ;; gateway proxy-list URLs in from CI secrets ($ENV{...} in
+  ;; client/CMakeLists.txt), so without these every such key fails with
+  ;; "Missing AGW public key" while self-hosted keys, which carry their
+  ;; whole config, keep working.
+  ;;
+  ;; Values read out of the official 5.1.0.6 Linux release binary.  Keep the
+  ;; key byte-identical: the client also hashes it into the AES key that
+  ;; decrypts the downloaded proxy lists.  DEV_* is upstream's test
+  ;; environment and stays unset.
+  (list
+   (list "PROD_AGW_PUBLIC_KEY"
+         ;; Joined with a literal backslash-n: CMake pastes the value into
+         ;; a C string literal through -D, which turns it into a newline.
+         (string-join
+          '("-----BEGIN PUBLIC KEY-----"
+            "MIICIjANBgkqhkiG9w0BAQEFAAOCAg8AMIICCgKCAgEAj5mxl/4DL3Sk89ntxs5G"
+            "X3JawGQWIoq6rvNkOzNGuNgedNS2+pi6hZl3Izl1Io9om4KiUlMT6mgLO1hTr9q+"
+            "s7CYhlvroFA7ErucF+9L+7FCt0Igi0kIK/R2/vxd/2HaUrorn/aSvvutkYwbfxqW"
+            "SwtzE+RuBeDWGvEt937OW0oqYONPYv9E4T56Dz/EZ6v2t8ejAnKLbGD/GocMmipK"
+            "7etFSiSMAB2RmaztqTq4NleBepfO80XpYlW9pCSXuHcE8wxHczkzxsbyMAMsG/K3"
+            "vUQY6qPtohqqzSSBwa/8u2ptNHBeor7l7DdYXeR/Nqcc4z92VUkZ5lOVR4evkS5V"
+            "/wQqp5tnOJEj3NjUhEhXFoNEapbZd1bh6iQoUk7jC1TdvKJ/nPKGZAsHRpr0rNKz"
+            "fx/N/Oo6lr2yh/+ps6VxTkbPmB6E85WOO3UvjImZUY0XQdBjWle/4iJLdEC77Nr0"
+            "jXhdgeypucy6jkB6iBHMeVMlrNMEV7UxoBR/cCNx55zu/8sml5ByiDvCDT7sRomN"
+            "NgVt5S/FaVjYuzFUifJ12ToChXFgESKFmuso7WluEaWvMIGREdrMrKQKHfYLOzWF"
+            "2B5ZJDqw4o03fU4J/6rw61M1b+rjVpXMjPnzc2A+RgcjTvXv955gfZkwe4lt5wk/"
+            "3j8zMVo3+zLrMTAaEeIUM0UCAwEAAQ=="
+            "-----END PUBLIC KEY-----")
+          "\\n"))
+   ;; Where the client looks up gateway proxies when the gateway itself is
+   ;; unreachable.
+   (list "PROD_S3_ENDPOINT"
+         (string-join
+          '("https://s3.eu-north-1.amazonaws.com/amnezia/"
+            "https://storage.googleapis.com/lambda-list/"
+            "https://amnzstrg01.blob.core.windows.net/lambda-list/"
+            "https://objectstorage.eu-zurich-1.oraclecloud.com/n/zrhfyaq6qxvh/b/lambda-list/o/")
+          ", "))
+   (list "FALLBACK_S3_ENDPOINT"
+         (string-join
+          '("https://storage.mwsapis.ru/lambda-list/"
+            "https://46.8.209.252/lambda-list/"
+            "https://s3.cloudruserapi.net/lambda-list/")
+          ", "))
+   ;; Matched against the API endpoint of older keys issued through
+   ;; Amnezia's Telegram bot; left empty, every such key is taken for
+   ;; Premium V1.
+   (list "FREE_V2_ENDPOINT" "13.248.139.44")
+   (list "PREM_V1_ENDPOINT" "52.223.54.40")))
+
 (define-public amnezia-vpn
   (let ((commit "94b51df24790bf52427afe82d81c87a95460bdfd")
         (revision "0"))
@@ -187,6 +242,31 @@ geo-based split routing for its Xray/VLESS protocol backend.")
                    (string-append
                     "endif() # GUIX: end skip openvpn RUNPATH rewrite\n"
                     "# install drivers")))))
+            (add-after 'install 'install-desktop-entry
+              ;; Upstream installs the desktop entry and icon into the prefix
+              ;; root, next to the systemd unit and scripts with which its
+              ;; /opt-based packages copy them to /usr/share.  Put them where
+              ;; desktop environments look, and drop the rest.
+              (lambda _
+                (let ((apps (string-append #$output "/share/applications"))
+                      (icons (string-append #$output
+                                            "/share/icons/hicolor/512x512/apps")))
+                  (with-directory-excursion #$output
+                    (substitute* "AmneziaVPN.desktop"
+                      (("^Exec=.*")
+                       (string-append "Exec=" #$output "/bin/AmneziaVPN\n"))
+                      (("^Icon=.*")
+                       "Icon=AmneziaVPN\n"))
+                    (mkdir-p apps)
+                    (mkdir-p icons)
+                    (rename-file "AmneziaVPN.desktop"
+                                 (string-append apps "/AmneziaVPN.desktop"))
+                    (rename-file "AmneziaVPN.png"
+                                 (string-append icons "/AmneziaVPN.png"))
+                    (for-each delete-file
+                              '("AmneziaVPN.service"
+                                "post_install.sh"
+                                "post_uninstall.sh"))))))
             (add-after 'qt-wrap 'unwrap-data-files
               (lambda* (#:key outputs #:allow-other-keys)
                 (define bin (string-append (assoc-ref outputs "out") "/bin"))
@@ -226,3 +306,28 @@ client (@command{AmneziaVPN}) together with its privileged helper service
 configuration and speaks to the GUI over a local Qt Remote Objects
 connection.")
       (license license:gpl3))))
+
+(define-public amnezia-vpn-premium
+  (package
+    (inherit amnezia-vpn)
+    (name "amnezia-vpn-premium")
+    (arguments
+     (substitute-keyword-arguments (package-arguments amnezia-vpn)
+       ((#:configure-flags flags)
+        ;; Once the gateway is usable, the client asks it for updates at
+        ;; every start.  Guix takes care of updates.
+        #~(cons "-DCLIENT_ENABLE_APP_UPDATES=0" #$flags))
+       ((#:phases phases)
+        #~(modify-phases #$phases
+            (add-before 'configure 'set-gateway-environment
+              (lambda _
+                (for-each (lambda (variable)
+                            (apply setenv variable))
+                          '#$%amnezia-vpn-gateway-environment)))))))
+    (synopsis "Amnezia VPN client with support for Amnezia Premium")
+    (description
+     "This variant of @code{amnezia-vpn} can also use keys for Amnezia's own
+Premium and Free services.  Those keys only point at Amnezia's API gateway,
+so the client is built with the gateway's public key and endpoints, which
+upstream leaves out of its source code.  Its built-in update check is
+turned off; otherwise it is the same as @code{amnezia-vpn}.")))

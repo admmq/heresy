@@ -19,7 +19,6 @@
   (initrd-modules (append (list "hv_storvsc" "hv_vmbus" "hv_utils"
                                 "hid-hyperv" "hv_balloon" "hyperv_drm")
                           (base-initrd-modules linux-libre)))
-                          ;; %base-initrd-modules))
   (packages
    (append
     (list curl

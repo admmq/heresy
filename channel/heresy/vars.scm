@@ -1,8 +1,11 @@
 (define-module (heresy vars)
   #:use-module (guix channels)
+  #:use-module ((gnu bootloader) #:prefix gnu-bootloader:)
+  #:use-module ((gnu bootloader grub) #:prefix gnu-grub:)
   #:export (%base-substitutes-urls
             %substitutes-urls
-            %channels))
+            %channels
+            %efi-grub-configuration))
 
 (define %base-substitutes-urls
   (list "https://bordeaux.guix.gnu.org"
@@ -37,3 +40,9 @@
          (name 'heresy)
          (url "https://github.com/admmq/heresy")
          (branch "main"))))
+
+(define %efi-grub-configuration
+  (gnu-bootloader:bootloader-configuration
+   (bootloader gnu-grub:grub-efi-bootloader)
+   (targets '("/boot/efi"))
+   (theme (gnu-grub:grub-theme (image #f)))))
