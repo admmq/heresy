@@ -10,7 +10,7 @@
 
 (use-service-modules desktop xorg)
 (use-package-modules linux bootloaders certs window-management
-                     gnome emacs emacs-xyz)
+                     gnome emacs emacs-xyz games)
 
 (operating-system
   (host-name "grimoire")
@@ -62,6 +62,7 @@
                     %base-packages))
 
   (services (append (list (service bluetooth-service-type)
+                          (udev-rules-service 'steam-devices steam-devices-udev-rules)
                           (service gnome-desktop-service-type)
                           (service screen-locker-service-type
                                    (screen-locker-configuration
