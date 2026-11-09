@@ -7,77 +7,79 @@
   #:use-module (gnu packages disk)
   #:use-module (gnu packages base)
   #:use-module (gnu packages backup)
+  #:use-module (gnu packages compression)
+  #:use-module (gnu packages gawk)
+  #:use-module (gnu packages wget)
+  #:use-module (gnu packages qt)
   #:use-module (gnu packages bash)
   #:use-module (gnu packages python-build)
+  #:use-module (gnu packages haskell-xyz)
   #:use-module (guix gexp)
   #:use-module (guix packages)
   #:use-module (guix git-download)
-  #:use-module (guix build-system trivial)
+  #:use-module (guix build-system copy)
+  #:use-module (guix build-system qt)
   #:use-module (guix build-system pyproject))
 
 (define-public woeusb
-  (let ((revision "0")
-	;; named branch is outdated
-	(commit "34b400d99d3c4089f487e1d4f7d71970b2d4429e"))
+  (let ((revision "1")
+        (commit "4c1f1c9718218c5a22d945a72ed78a2b4a4977eb"))
     (package
       (name "woeusb")
-      (version (git-version "0.0.0" revision commit))
+      (version (git-version "5.2.4" revision commit))
       (source
        (origin
-	 (method git-fetch)
-	 (uri (git-reference
-	       (url "https://github.com/WoeUSB/WoeUSB.git")
-	       (commit commit)))
-	 (file-name (git-file-name name version))
-	 (sha256
-	  (base32 "05ghja2rpn4kqak9yll398na54dscsfnm3z5f2pi54lan98wzimh"))))
-      (build-system trivial-build-system)
-      (inputs
-       (list ntfs-3g grub ncurses parted coreutils util-linux wimlib))
+         (method git-fetch)
+         (uri (git-reference
+               (url "https://github.com/WoeUSB/WoeUSB")
+               (commit commit)))
+         (file-name (git-file-name name version))
+         (sha256
+          (base32 "0ahjnlkcwgy3c8g2ic0nadsbj5r7alrdxva4914nz20iv0frrxhs"))))
+      (build-system copy-build-system)
       (arguments
-       `(#:modules ((guix build utils))
-	 #:builder
-	 (begin
-	   (use-modules (guix build utils))
-	   ;; copy source
-	   (copy-recursively (assoc-ref %build-inputs "source") ".")
-	   ;; patch source
-	   (substitute* "sbin/woeusb"
-	     (("tput sgr0") (string-append (assoc-ref %build-inputs "ncurses")
-					   "/bin/tput"
-					   " sgr0"))
-	     (("parted --script")
-	      (string-append (assoc-ref %build-inputs "parted")
-			     "/sbin/parted --script"))
-	     (("parted \\\\")
-	      (string-append (assoc-ref %build-inputs "parted")
-			     "/sbin/parted \\"))
-	     (("grub-install") (string-append (assoc-ref %build-inputs "grub")
-					      "/sbin/grub-install"))
-	     (("command -v mkntfs") (string-append
-				     "command -v "
-				     (assoc-ref %build-inputs "ntfs-3g")
-				     "/sbin/mkntfs"))
-	     (("command_mkntfs_ref=mkntfs") (string-append
-					     "command_mkntfs_ref="
-					     (assoc-ref %build-inputs "ntfs-3g")
-					     "/sbin/mkntfs"))
-	     (("readlink \\\\") (string-append
-				 (assoc-ref %build-inputs "coreutils")
-				 "/bin/readlink \\"))
-	     (("wimlib-imagex") (string-append
-				 (assoc-ref %build-inputs "wimlib")
-				 "/bin/wimlib-imagex"))
-	     ;; could not find partprobe package
-	     ;; as i see this command never used in the program
-	     (("partprobe \\\\") "\\"))
-	   ;; install phase
-	   (install-file "sbin/woeusb" (string-append %output "/bin"))
-	   #t)))
+       (list
+        #:install-plan
+        #~'(("sbin/woeusb" "bin/")
+            ("share/man/man1/woeusb.1" "share/man/man1/")
+            ("share/woeusb" "share/woeusb"))
+        #:phases
+        #~(modify-phases %standard-phases
+            (add-after 'unpack 'patch-script
+              (lambda _
+                (substitute* "sbin/woeusb"
+                  (("@@WOEUSB_VERSION@@")
+                   #$version)
+                  (("^#!/usr/bin/env bash" shebang)
+                   (string-append
+                    shebang "\n"
+                    "export PATH=\""
+                    (string-join
+                     (search-path-as-list
+                      '("bin" "sbin")
+                      (list #$@(map cadr (package-inputs this-package))))
+                     ":")
+                    "${PATH:+:$PATH}\""))))))))
+      (inputs
+       (list 7zip                       ;optional, for Windows 7 UEFI booting
+             coreutils
+             dosfstools
+             findutils
+             gawk
+             grep
+             grub
+             ncurses
+             ntfs-3g
+             parted
+             util-linux
+             wget                       ;fetches the UEFI:NTFS image
+             wimlib))
       (home-page "https://github.com/WoeUSB/WoeUSB")
-      (synopsis "A Microsoft Windows® USB installation media preparer for GNU+Linux")
-      (description "Very usefull package for anyone who wants to make a bootable Windows® USB stick
-using free and open source operating system.")
+      (synopsis "Create bootable Windows USB drives")
+      (description
+       "WoeUSB creates a bootable Microsoft Windows USB stick from a Windows
+installation ISO image or DVD.  It supports Windows Vista and later, both
+legacy PC (BIOS) and UEFI booting, and FAT32 or NTFS target file systems.")
       (license license:gpl3+))))
 
 (define-public heresy-backuper
@@ -110,3 +112,36 @@ using free and open source operating system.")
       (synopsis "my backup utility")
       (description "my backup utility")
       (license license:wtfpl2))))
+
+(define-public bino
+  (package
+    (name "bino")
+    (version "2.8")
+    (source
+     (origin
+       (method git-fetch)
+       (uri (git-reference
+             (url "https://github.com/marlam/bino")
+             (commit (string-append "bino-" version))))
+       (file-name (git-file-name name version))
+       (sha256
+        (base32 "1pzd3xvpj1c9sbwcmnrm90wfjcjr667nkkg6hlnd46s47plvywms"))))
+    (build-system qt-build-system)
+    (arguments
+     (list #:qtbase qtbase
+           #:tests? #f))                ;no test suite
+    (native-inputs
+     (list pandoc                       ;for the HTML manual and man page
+           qttools))                    ;for LinguistTools
+    (inputs
+     (list qtmultimedia
+           qtsvg                        ;to load the SVG window icon
+           qtwayland))
+    (home-page "https://bino3d.org/")
+    (synopsis "3D video player")
+    (description
+     "Bino is a video player with a focus on 3D and Virtual Reality.  It can
+play stereoscopic 3D videos and images as well as 180° and 360° surround
+videos, with or without 3D, and supports many 3D display modes, including
+anaglyph glasses, interlaced displays, and OpenGL quad-buffered stereo.")
+    (license license:gpl3+)))
