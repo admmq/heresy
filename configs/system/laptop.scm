@@ -46,9 +46,15 @@
   (swap-devices (list (swap-space
                        (target "/swapfile"))))
 
-  (users (cons (user-account
+  (users (cons* (user-account
                 (name "user")
                 (comment "λ")
+                (group "users")
+                (supplementary-groups '("wheel" "netdev"
+                                        "audio" "video")))
+               (user-account
+                (name "storage")
+                (comment "undefined")
                 (group "users")
                 (supplementary-groups '("wheel" "netdev"
                                         "audio" "video")))
