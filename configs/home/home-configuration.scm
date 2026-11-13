@@ -4,6 +4,8 @@
              (gnu home services)
              (gnu home services shells)
              (gnu home services guix)
+             (gnu home services desktop)
+             (gnu home services sound)
              (guix gexp)
              (guix channels)
              ((heresy vars) #:prefix heresy:))
@@ -30,6 +32,11 @@
    (append (list ;; (service home-bash-service-type
                  ;;          (home-bash-configuration
                  ;;           (aliases '(("ls" . "ls --color=auto")))))
+                 ;; Sound: nothing on the system side starts a sound server.
+                 ;; PipeWire (with its PulseAudio shim) needs the session
+                 ;; D-Bus that home-dbus-service-type provides.
+                 (service home-dbus-service-type)
+                 (service home-pipewire-service-type)
                  (service home-channels-service-type
                           heresy:%channels)
                  ;; Symlinked into $HOME; local-file paths are relative

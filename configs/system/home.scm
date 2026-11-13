@@ -3,6 +3,7 @@
              (nongnu packages nvidia)
              (nongnu system linux-initrd)
              (nonguix transformations)
+             (heresy pkgs waymacs)
              ((heresy srvcs system) #:prefix heresy:)
              ((heresy pkgs emacs) #:prefix heresy:)
              ((heresy pkgs linux) #:prefix heresy:)
@@ -60,15 +61,17 @@
                  %base-user-accounts))
 
     (packages (append (list
+                       waymacs
                        emacs emacs-exwm emacs-desktop-environment
                        emacs-magit emacs-pdf-tools
                        heresy:emacs-stuff)
                       %base-packages))
 
+    ;; GDM has known issues with the NVIDIA proprietary driver (see nonguix
+    ;; README), so it is replaced with SDDM.
     (services (append (list (service bluetooth-service-type)
                             (service openssh-service-type)
                             (service gnome-desktop-service-type)
-                            (service xfce-desktop-service-type)
                             (service sddm-service-type
                                      (sddm-configuration
                                       (session-command
