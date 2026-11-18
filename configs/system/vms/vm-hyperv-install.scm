@@ -11,8 +11,7 @@
              (gnu system install)
              (gnu system linux-initrd)
              (guix channels)
-             ((heresy vars) #:prefix heresy:)
-             )
+             ((heresy vars) #:prefix heresy:))
 
 (operating-system
   (inherit installation-os)
@@ -33,6 +32,4 @@
       config => (guix-configuration
                  (inherit config)
                  (channels heresy:%channels)
-                 (guix (guix-for-channels heresy:%channels))))))
-
-  )
+                 (guix (guix-for-channels heresy:%channels)))))))

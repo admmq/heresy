@@ -10,7 +10,7 @@
 
 (use-service-modules desktop xorg)
 (use-package-modules linux bootloaders certs window-management
-                     gnome emacs emacs-xyz games)
+                     gnome emacs emacs-xyz games password-utils)
 
 (operating-system
   (host-name "grimoire")
@@ -20,8 +20,7 @@
   (kernel heresy:my-linux-package)
   (initrd-modules (base-initrd-modules linux-libre))
   (initrd microcode-initrd)
-  (firmware (list linux-firmware
-                  sof-firmware))
+  (firmware (list linux-firmware))
 
   (bootloader heresy:%efi-grub-configuration)
 
@@ -30,6 +29,9 @@
           (source (uuid "cef010a5-45ea-446a-9855-f3e4503c50d4"))
           (target "cryptroot")
           (type luks-device-mapping))))
+
+  (swap-devices (list (swap-space
+                       (target "/swapfile"))))
 
   (file-systems (append
                  (list (file-system
@@ -43,24 +45,22 @@
                          (type "vfat")))
                  %base-file-systems))
 
-  (swap-devices (list (swap-space
-                       (target "/swapfile"))))
-
   (users (cons* (user-account
-                (name "user")
-                (comment "λ")
-                (group "users")
-                (supplementary-groups '("wheel" "netdev"
-                                        "audio" "video")))
-               (user-account
-                (name "storage")
-                (comment "undefined")
-                (group "users")
-                (supplementary-groups '("wheel" "netdev"
-                                        "audio" "video")))
-               %base-user-accounts))
+                 (name "user")
+                 (comment "λ")
+                 (group "users")
+                 (supplementary-groups '("wheel" "netdev"
+                                         "audio" "video")))
+                (user-account
+                 (name "storage")
+                 (comment "undefined")
+                 (group "users")
+                 (supplementary-groups '("wheel" "netdev"
+                                         "audio" "video")))
+                %base-user-accounts))
 
   (packages (append (list
+                     keepassxc
                      heresy:waymacs swaylock waybar
                      emacs emacs-exwm emacs-desktop-environment
                      emacs-magit emacs-pdf-tools
