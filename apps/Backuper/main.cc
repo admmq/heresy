@@ -1,4 +1,4 @@
-// g++ -std=c++17 -g main.cc -larchive -o Backuper
+// g++ -std=c++17 -g main.cc -larchive -o heresy-backuper
 #include <iostream>
 #include <string>
 #include <string_view>
