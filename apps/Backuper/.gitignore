@@ -1,4 +1,3 @@
-__pycache__/
-*.pyc
-build/
-*.egg-info/
+*.out
+Backuper
+heresy-backuper
