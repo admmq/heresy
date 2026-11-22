@@ -7,15 +7,9 @@
             %channels
             %efi-grub-configuration))
 
-(define %base-substitutes-urls
+(define %substitutes-urls
   (list "https://bordeaux.guix.gnu.org"
         "https://mirrors.sjtug.sjtu.edu.cn/guix"))
-
-(define %substitutes-urls
-  (append
-   %base-substitutes-urls
-   (list
-    "https://substitutes.nonguix.org")))
 
 (define %channels
   (list (channel
