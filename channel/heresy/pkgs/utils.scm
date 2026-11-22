@@ -82,11 +82,11 @@ installation ISO image or DVD.  It supports Windows Vista and later, both
 legacy PC (BIOS) and UEFI booting, and FAT32 or NTFS target file systems.")
       (license license:gpl3+))))
 
-(define-public heresy-backuper
+(define-public heresy-backuper-py
   (let ((revision "0")
         (commit "0c1e899db672f26f882809c89195ed5127b83f57"))
     (package
-      (name "heresy-backuper")
+      (name "heresy-backuper-py")
       (version (git-version "0.0.1" revision commit))
       (source
        (origin
