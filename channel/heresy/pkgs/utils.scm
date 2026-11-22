@@ -14,11 +14,13 @@
   #:use-module (gnu packages bash)
   #:use-module (gnu packages python-build)
   #:use-module (gnu packages haskell-xyz)
+  #:use-module (gnu packages cpp)
   #:use-module (guix gexp)
   #:use-module (guix packages)
   #:use-module (guix git-download)
   #:use-module (guix build-system copy)
   #:use-module (guix build-system qt)
+  #:use-module (guix build-system gnu)
   #:use-module (guix build-system pyproject))
 
 (define-public woeusb
@@ -104,10 +106,51 @@ legacy PC (BIOS) and UEFI booting, and FAT32 or NTFS target file systems.")
 
                   #:phases
                   #~(modify-phases %standard-phases
-                    (add-after 'unpack 'chdir
-                      (lambda _
-                        (chdir "apps/Backuper"))))))
+                      (add-after 'unpack 'chdir
+                        (lambda _
+                          (chdir "apps/Backuper"))))))
       (native-inputs (list python-setuptools python-wheel))
+      (home-page "https://github.com/admmq/heresy")
+      (synopsis "my backup utility")
+      (description "my backup utility")
+      (license license:wtfpl2))))
+
+(define-public heresy-backuper
+  (let ((revision "0")
+        (commit "fe8557de22887d46c02fe720d5cc2ca31218775a"))
+    (package
+      (name "heresy-backuper")
+      (version "1.0.0")
+      (source
+       (origin
+         (method git-fetch)
+         (uri (git-reference
+               (url "https://github.com/admmq/heresy")
+               (commit commit)))
+         (file-name (git-file-name name version))
+         (sha256
+          (base32 "13jqgsm03029grp17n57x4jcrbgwiyqns6cy0ikxxviz23lirrnp"))))
+      (build-system gnu-build-system)
+      (arguments
+       (list
+        #:tests? #f
+        #:phases
+        #~(modify-phases %standard-phases
+            (add-after 'unpack 'chdir
+              (lambda _
+                (chdir "apps/Backuper")))
+            (delete 'configure)
+            (replace 'build
+              (lambda _
+                (invoke "g++"
+                        "-std=c++17" "-O2" "main.cc"
+                        "-larchive"
+                        "-o" "heresy-backuper")))
+            (replace 'install
+              (lambda _
+                (install-file "heresy-backuper" (string-append #$output "/bin")))))))
+      (native-inputs (list cli11))
+      (inputs (list libarchive))
       (home-page "https://github.com/admmq/heresy")
       (synopsis "my backup utility")
       (description "my backup utility")
