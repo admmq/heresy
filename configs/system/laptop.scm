@@ -60,9 +60,9 @@
                 %base-user-accounts))
 
   (packages (append (list
-                     keepassxc
                      heresy:waymacs swaylock waybar
-                     emacs emacs-exwm emacs-desktop-environment
+                     emacs-pgtk
+                     emacs-desktop-environment
                      emacs-magit emacs-pdf-tools
                      heresy:emacs-stuff)
                     %base-packages))
